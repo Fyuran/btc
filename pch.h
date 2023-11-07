@@ -23,3 +23,6 @@
 #include <regex>
 #include <stdexcept>
 #include <filesystem>
+#include <shared_mutex>
+#include <ppl.h>
+#include <concurrent_vector.h>

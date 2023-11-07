@@ -54,7 +54,7 @@ int WINAPI RVExtensionArgs(char* output, int outputSize, const char* function, c
 			return -1;
 		}
 
-		strncpy_s(output, outputSize, ArmA::getData(filePath, outputSize, callbackPtr).c_str(), _TRUNCATE);
+		strncpy_s(output, outputSize-30, ArmA::getData(filePath, outputSize-30, callbackPtr).c_str(), _TRUNCATE);//["",200,0] size is 20 bytes
 		return 201;
 	}
 
