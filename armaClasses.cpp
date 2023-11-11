@@ -8,13 +8,13 @@ void ArmA::armaData::getDataToCallback(){
 		std::unordered_map<String, JSON> allCategories;
 		m_JSON->get_to(allCategories);
 		if (allCategories.size() < 9) throw std::runtime_error("JSON categories are less than 9");
-		for (auto& main : allCategories) {
+		for (const auto& main : allCategories) {
 			std::unordered_map<String, JSON> m1;
 			main.second.get_to(m1);
-			for (auto& secondary : m1) {
+			for (const auto& secondary : m1) {
 				std::unordered_map<String, JSON> m2;
 				secondary.second.get_to(m2);
-				for (auto& third : m2) {
+				for (const auto& third : m2) {
 					String formattedFunction{ std::format(R"(["{}", "{}"])", main.first, secondary.first) };
 					String s{ std::format(R"({{"{}":{}}})", third.first, third.second.dump()) };
 					String formattedOutput{ std::regex_replace(s, std::regex(R"(\\")"), R"(")") };

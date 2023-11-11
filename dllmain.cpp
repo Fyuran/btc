@@ -23,53 +23,65 @@ void __stdcall RVExtension(char* output, int outputSize, const char* function) {
 //"extension" callExtension["function", ["arguments"...]]
 int WINAPI RVExtensionArgs(char* output, int outputSize, const char* function, const char** args, int argsCnt) {
 
+	fs::path filePath;
 	std::vector<String> arguments;
-	if (argsCnt > 0)
-		for (uint16_t i = 0; i < argsCnt; ++i) {
+	if (argsCnt > 0) {
+		for (int i = 0; i < argsCnt; ++i) {
 			String s{ args[i] };
 			s.erase(0, 1);
 			s.erase(s.size() - 1); //unescaped quotes are present when converting
 			arguments.push_back(s);
 		}
-	else
-	{
-		strncpy_s(output, outputSize, "No arguments passed.", _TRUNCATE);
-		return -1;
-	}
-	const fs::path filePath{ arguments.at(0) + ".JSON" };
-	const bool fileExists = fs::exists(filePath);
-	if (!fileExists) {
-		strncpy_s(output, outputSize, std::format("{} not found", fs::absolute(filePath).generic_string()).c_str(), _TRUNCATE);
-		return -1;
+		try {
+			filePath = { arguments.at(0) };
+			if (!fs::exists(filePath)) throw std::runtime_error(std::format("{} not found", filePath.string()));
+;		}
+		catch (const std::exception& e) {
+			strncpy_s(output, outputSize, e.what(), _TRUNCATE);
+			return -1;
+		}
+		
 	}
 
 	if (strcmp(function, "dataExists") == 0) {
-		if (fileExists) return 200;
-	}
 
-	if (strcmp(function, "getData") == 0)
-	{
-		if (arguments.size() != 1) {
-			strncpy_s(output, outputSize, "length_error: passed arguments should be one.", _TRUNCATE);
-			return -1;
-		}
+		if (fs::exists(filePath)) return 200;
+	}	
 
-		strncpy_s(output, outputSize-30, ArmA::getData(filePath, outputSize-30, callbackPtr).c_str(), _TRUNCATE);//["",200,0] size is 20 bytes
+	if (strcmp(function, "copyData") == 0) {
+		strncpy_s(output, outputSize - 30, ArmA::copyData(filePath).c_str(), _TRUNCATE);
 		return 201;
 	}
 
-	if (strcmp(function, "deleteData") == 0)
-	{
-		if (arguments.size() != 1) {
-			strncpy_s(output, outputSize, "length_error: passed arguments should be one.", _TRUNCATE);
+	if (strcmp(function, "getData") == 0) {
+		strncpy_s(output, outputSize - 30, ArmA::getData(filePath, outputSize - 30, callbackPtr).c_str(), _TRUNCATE);
+		return 202;
+
+	}
+
+	if (strcmp(function, "deleteData") == 0) {
+		strncpy_s(output, outputSize - 30, ArmA::deleteData(filePath).c_str(), _TRUNCATE);
+		return 203;
+		
+	}
+
+	if (strcmp(function, "renameData") == 0) {
+		if (arguments.size() != 2) {
+			strncpy_s(output, outputSize, "length_error: passed arguments should be two: [filePath, name].", _TRUNCATE);
 			return -1;
 		}
 
-		strncpy_s(output, outputSize, ArmA::deleteData(filePath).c_str(), _TRUNCATE);
-		return 202;
+		String name = { arguments.at(1) };
+		strncpy_s(output, outputSize, ArmA::renameData(filePath, name).c_str(), _TRUNCATE);
+		return 204;
 	}
 
-	strncpy_s(output, outputSize, "Available Functions: getData", _TRUNCATE);
+	if (strcmp(function, "retrieveList") == 0) {
+		strncpy_s(output, outputSize - 30, ArmA::retrieveList().c_str(), _TRUNCATE);
+		return 205;
+	}
+
+	strncpy_s(output, outputSize, "Available Functions: getData, retrieveList, deleteData, copyData, renameData", _TRUNCATE);
 	return -1;
 }
 
@@ -84,6 +96,9 @@ void WINAPI RVExtensionContext(const char** argv, int argc) {
 }
 
 //"btc_ArmaToJSON" callExtension "btc_hm_Altis {}"
-//"btc_ArmaToJSON" callExtension ["dataExists", ["btc_hm_Altis"]]
-//"btc_ArmaToJSON" callExtension ["getData", ["btc_hm_Altis"]]
-//"btc_ArmaToJSON" callExtension ["deleteData", ["btc_hm_Altis"]]
+//"btc_ArmaToJSON" callExtension ["dataExists", ["btc_hm_Altis.JSON"]]
+//"btc_ArmaToJSON" callExtension ["getData", ["btc_hm_Altis.JSON"]]
+//"btc_ArmaToJSON" callExtension ["retrieveList", []]
+//"btc_ArmaToJSON" callExtension ["deleteData", ["F:\SteamLibrary\steamapps\common\Arma 3\btc_hm_Altis.JSON"]]
+//"btc_ArmaToJSON" callExtension ["copyData", ["F:\SteamLibrary\steamapps\common\Arma 3\btc_hm_Altis.JSON"]]
+//"btc_ArmaToJSON" callExtension ["renameData", ["F:\SteamLibrary\steamapps\common\Arma 3\btc_hm_Altis.JSON", "Test"]]

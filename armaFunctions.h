@@ -6,9 +6,12 @@ using armaCallbackPtr = int(*)(char const*, char const*, char const*);
 namespace fs = std::filesystem;
 
 namespace ArmA {
-	String copyJSONfile(const String&);
-	String copyJSONfile(const fs::path);
+	String copyData(const fs::path&);
 	String writeData(const char*);
-	String getData(const fs::path, const int, armaCallbackPtr);
-	String deleteData(const fs::path);
+	String getData(const fs::path&, const int, armaCallbackPtr);
+	String to_string(const std::vector<String>&);
+	String renameData(const fs::path&, const String&);
+	String deleteData(const fs::path&);
+	String retrieveList();
+
 }
