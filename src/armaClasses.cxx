@@ -1,10 +1,7 @@
-#include "pch.h"
 #include "armaClasses.h"
-
 
 void ArmA::armaData::getDataToCallback(){
 	try {
-		if (!(m_JSON->contains(m_fileName))) throw std::out_of_range(m_fileName + " is not within JSON structure");
 		std::unordered_map<String, JSON> allCategories;
 		m_JSON->get_to(allCategories);
 		if (allCategories.size() < 9) throw std::runtime_error("JSON categories are less than 9");
@@ -31,15 +28,15 @@ void ArmA::armaData::getDataToCallback(){
 		armaPtr("btc_ArmaToJSON", "EXCEPTION", e.what());
 		return;
 	}
-	concurrency::parallel_for_each(output.begin(), output.end(), [&, this](const std::pair<String, String>& pair) {
+	std::for_each(std::execution::par_unseq, output.begin(), output.end(), [&, this](const std::pair<String, String>& pair) {
 		recursiveOutput(pair); 
-		}, concurrency::static_partitioner());
+		});
 
 	armaPtr("btc_ArmaToJSON", "FinishedLoading", "1");
 }
 
 void ArmA::armaData::recursiveOutput(const std::pair<String, String>& pair) {
-	int buffer = armaPtr("btc_ArmaToJSON", pair.first.c_str(), pair.second.c_str());
+	int buffer{ armaPtr("btc_ArmaToJSON", pair.first.c_str(), pair.second.c_str()) };
 	if (buffer < 0) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(33));
 		recursiveOutput(pair);

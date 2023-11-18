@@ -1,0 +1,7 @@
+LIBRARY   btc_ArmaToJSON
+EXPORTS
+   RVExtensionRegisterCallback	@1
+   RVExtension	@2
+   RVExtensionArgs	@3
+   RVExtensionContext	@4
+   RVExtensionVersion	@5

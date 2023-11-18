@@ -5,24 +5,15 @@
 // Do not add files here that you will be updating frequently as this negates the performance advantage.
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-// Windows Header Files
-#include <windows.h>
-
-#include <iostream>
-#include <fstream>
-#include <vector>
+#include <filesystem>
 #include "json.hpp"
-#include <mutex>
+#include <string>
+#include <vector>
+#include <format>
 #include <thread>
+#include <regex>
+#include <future>
 #include <execution>
 #include <chrono>
-#include <future>
-#include <format>
-#include <assert.h> 
-#include <regex>
-#include <stdexcept>
-#include <filesystem>
-#include <shared_mutex>
-#include <ppl.h>
-#include <concurrent_vector.h>
+#include <iostream>
+#include <fstream>
