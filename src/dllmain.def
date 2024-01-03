@@ -1,4 +1,4 @@
-LIBRARY   btc_ArmaToJSON
+LIBRARY   btc_ArmaToJSON_x64
 EXPORTS
    RVExtensionRegisterCallback	@1
    RVExtension	@2

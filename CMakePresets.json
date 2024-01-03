@@ -8,8 +8,6 @@
       "binaryDir": "${sourceDir}/out/build/${presetName}",
       "installDir": "${sourceDir}/out/install/${presetName}",
       "cacheVariables": {
-        "CMAKE_C_COMPILER": "cl.exe",
-        "CMAKE_CXX_COMPILER": "cl.exe",
         "CMAKE_CXX_FLAGS": "/DWIN32 /D_WINDOWS /D_CRT_SECURE_NO_WARNINGS /EHsc",
         "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": false
       },
