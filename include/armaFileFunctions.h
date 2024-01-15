@@ -6,13 +6,11 @@ using String_view = std::string_view;
 using armaCallbackPtr = int(*)(char const*, char const*, char const*);
 namespace fs = std::filesystem;
 
-namespace ArmA {
-	String copyData(const fs::path&);
-	String writeData(const char*);
-	String getData(const fs::path&, const int, armaCallbackPtr);
+namespace arma {
+	String copyFile(const fs::path&);
+	String writeFile(const char*);
 	String to_string(const std::vector<String>&);
-	String renameData(const fs::path&, String);
-	String deleteData(const fs::path&);
+	String renameFile(const fs::path&, String);
+	String deleteFile(const fs::path&);
 	String retrieveList();
-
 }

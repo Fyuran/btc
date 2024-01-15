@@ -1,8 +1,6 @@
-#include "armaFunctions.h"
-#include "armaClasses.h"
+#include "armaFileFunctions.h"
 
-
-String ArmA::copyData(const fs::path& filePath)
+String arma::copyFile(const fs::path& filePath)
 {
 	const std::chrono::zoned_time time{ std::chrono::current_zone(),
 											std::chrono::system_clock::now() };
@@ -34,7 +32,7 @@ String ArmA::copyData(const fs::path& filePath)
 }
 
 
-String ArmA::writeData(const char* function) {
+String arma::writeFile(const char* function) {
 	String fileNameFull;
 	JSON json;
 
@@ -75,26 +73,7 @@ String ArmA::writeData(const char* function) {
 	else return "";
 }
 
-String ArmA::getData(const fs::path& filePath, const int outputSize, armaCallbackPtr callbackPtr) {
-
-	std::unique_ptr<JSON> json{ std::make_unique<JSON>() };
-	try {
-		std::ifstream jsonFile(filePath);
-		*json = JSON::parse(jsonFile);
-	}
-	catch (const std::exception& e) {
-		return e.what();
-	}
-
-	std::unique_ptr<ArmA::armaData> arma{ std::make_unique<ArmA::armaData>(std::move(json), outputSize, callbackPtr) };
-	std::thread thread1{ &ArmA::armaData::getDataToCallback, std::move(arma) };
-	thread1.detach();
-
-	return "Loading Data";
-}
-
-
-String ArmA::retrieveList()
+String arma::retrieveList()
 {
 	const fs::directory_iterator dir{"."};
 	std::vector<String> vecDirs;
@@ -105,11 +84,11 @@ String ArmA::retrieveList()
 			vecDirs.push_back(fs::absolute(p.path()).string());	 
 	}
 
-	return ArmA::to_string(vecDirs);
+	return arma::to_string(vecDirs);
 }
 
 
-String ArmA::to_string(const std::vector<String>& vec) {
+String arma::to_string(const std::vector<String>& vec) {
 	std::stringstream ss;
 	ss << "[";
 	for (const auto& el : vec) {
@@ -120,7 +99,7 @@ String ArmA::to_string(const std::vector<String>& vec) {
 	return ss.str();
 }
 
-String ArmA::deleteData(const fs::path& filePath) {
+String arma::deleteFile(const fs::path& filePath) {
 	String fileNameFull{ filePath.filename().string() };
 
 	fs::remove(filePath);
@@ -129,7 +108,7 @@ String ArmA::deleteData(const fs::path& filePath) {
 	return fmt;
 }
 
-String ArmA::renameData(const fs::path& filePath, String name) {
+String arma::renameFile(const fs::path& filePath, String name) {
 	String fileNameFull{ filePath.filename().string() };
 	
 	const std::chrono::zoned_time time{ std::chrono::current_zone(),
