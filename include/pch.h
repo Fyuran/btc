@@ -11,9 +11,7 @@
 #include <vector>
 #include <format>
 #include <thread>
-#include <regex>
 #include <future>
-#include <execution>
 #include <chrono>
 #include <iostream>
 #include <fstream>
