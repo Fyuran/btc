@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-using JSON = nlohmann::json;
+using JSON = nlohmann::ordered_json;
 using String = std::string;
 using String_view = std::string_view;
 using armaCallbackPtr = int(*)(char const*, char const*, char const*);

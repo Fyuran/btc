@@ -4,7 +4,7 @@
 #include "armaDataFunctions.h"
 
 constexpr auto CURRENT_VERSION = "1.0.0.0";
-using JSON = nlohmann::json;
+using JSON = nlohmann::ordered_json;
 using String = std::string;
 namespace fs = std::filesystem;
 

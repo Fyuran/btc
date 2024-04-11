@@ -45,37 +45,41 @@ String arma::writeFile(const char* function) {
 
 		const std::chrono::zoned_time time{ std::chrono::current_zone(),
 						std::chrono::system_clock::now() };
-		fileNameFull += std::format(" ({:%OH-%OM %F}).JSON", time);
+		fileNameFull += std::format("({:%OH-%OM %F}).JSON", time);
 	}
 	catch (const std::exception& e) {
 		return e.what();
 	}
 
+	fs::path filePath{"./JSON/"};
+	std::filesystem::create_directories(filePath);
+	filePath.append(fileNameFull);
+
 	std::promise<bool> p;
 	std::future<bool> f{ p.get_future() };
 
-	std::thread thread1([&]() {
-
-		std::ofstream jsonFile{ fileNameFull };
+	std::thread thread1([&](){
+		std::ofstream jsonFile{ filePath };
 		if (jsonFile) {
 			jsonFile << std::setw(4) << json;
 			jsonFile.close();
 
-			p.set_value_at_thread_exit(!(jsonFile.is_open()));
+			p.set_value_at_thread_exit(fs::exists(filePath));
 		}
-		});
+	});
 	thread1.detach();
 
 	bool hasWrittenToFile{ f.get() };
-
-	fs::path filePath{ fileNameFull };
+	
 	if (hasWrittenToFile) return fs::absolute(filePath).string();
 	else return "";
 }
 
 String arma::retrieveList()
 {
-	const fs::directory_iterator dir{"."};
+	fs::path filePath{ "./JSON/" };
+	std::filesystem::create_directories(filePath);
+	const fs::directory_iterator dir{ filePath };
 	std::vector<String> vecDirs;
 
 	for (const auto& p : dir) {

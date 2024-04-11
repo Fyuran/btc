@@ -21,5 +21,6 @@ target_precompile_headers(
 target_include_directories(btc_ArmaToJSON_x64 PUBLIC
                            "include"
 )
+target_link_libraries(btc_ArmaToJSON_x64 -static-libgcc -static-libstdc++)
 
 target_compile_features(btc_ArmaToJSON_x64 PUBLIC cxx_std_20)
