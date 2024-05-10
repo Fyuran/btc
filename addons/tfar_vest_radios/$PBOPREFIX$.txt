@@ -1,0 +1,6 @@
+//<'btc_tfar_vest_radios.pbo' properties via Mikero's dos tools, dll version 9.10>
+prefix=z\btc\addons\tfar_vest_radios;
+Mikero=DePbo.dll.7.16;
+version=Fri Feb 21 20:52:07 2020;
+//PboType=Arma Addon;
+//</properties>

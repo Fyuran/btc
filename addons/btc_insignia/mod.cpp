@@ -1,0 +1,14 @@
+name = "=BTC= BlackTemplarsClan - Insignia";
+picture = "btc_logo.paa";
+actionName = "Website";
+action = "http://www.blacktemplars.it";
+description = "Adds a wearable sleeve patch";
+logo = "btc_logo.paa";
+logoOver = "btc_logo.paa";
+tooltip = "=BTC= BlackTemplarsClan - Insignia";
+tooltipOwned = "=BTC= BlackTemplarsClan - Insignia";
+overview = "Adds a wearable sleeve patch";
+author = "=BTC=Fyuran";
+overviewPicture = "btc_logo.paa";
+overviewText = "";
+overviewFootnote = "";
