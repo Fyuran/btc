@@ -15,30 +15,20 @@ class CfgPatches {
 		units[] = {
             QGVAR(2x2),
             QGVAR(2x2_45),
-            QGVAR(Roadway_2x2),
-            QGVAR(Roadway_2x2_45),
 
             QGVAR(2x4),
             QGVAR(2x4_45),
-            QGVAR(Roadway_2x4),
-            QGVAR(Roadway_2x4_45),
 
             GVAR(4x2_45),
-            GVAR(Roadway_4x2_45),
 
             GVAR(4x4),
             GVAR(4x4_45),
-            GVAR(Roadway_4x4),
-            GVAR(Roadway_4x4_45)
 
             GVAR(4x6),
-            GVAR(Roadway_4x6),
 
             GVAR(6x4_45),
-            GVAR(Roadway_6x4_45),
 
             GVAR(6x6),
-            GVAR(Roadway_6x6)
 
             GVAR(Wall_4x1),
 	        GVAR(Wall_4x2),
@@ -61,17 +51,19 @@ class CfgVehicles {
 	class GVAR(2x2): House {
         author = "=BTC= Fyuran";  
         displayName = "AI Path 2x2"; 
-        model = QPATHTOF(models\AIPath_2x2.p3d); 
+        model = QPATHTOF(models\Floor_2x2.p3d); 
         scope = 2; 
         picture = "pictureStaticObject";
         icon = "\z\btc\addons\AIPaths\materials\iconAIObject.paa";
         hiddenSelections[] = { 
+            "Plane",
             "Center_spheres",
 			"Outside_spheres",
 			"Path_Trace" 
         };
 		scopeCurator = 2;
         hiddenSelectionsTextures[] = {
+            "\z\btc\addons\aipaths\materials\dev_2x2.paa",
             "#(rgb,8,8,3)color(1,0,0,1)",
             "#(rgb,8,8,3)color(0,0,1,1)",
             "#(rgb,8,8,3)color(0,1,0,1)"
@@ -85,43 +77,14 @@ class CfgVehicles {
 	};
     class GVAR(2x2_45): GVAR(2x2) {
         displayName = "AI Path 2x2(45°)"; 
-        model = QPATHTOF(models\AIPath_2x2_45.p3d); 
-	};
-	class GVAR(Roadway_2x2): GVAR(2x2) {
-        displayName = "AI Path 2x2(Roadway)"; 
-        model = QPATHTOF(models\AIPath_Roadway_2x2.p3d); 
-        hiddenSelections[] = { 
-            "Plane",
-            "Center_spheres",
-			"Outside_spheres",
-			"Path_Trace" 
-        };
-        hiddenSelectionsTextures[] = {
-            "\z\btc\addons\aipaths\materials\dev_2x2.paa",
-            "#(rgb,8,8,3)color(1,0,0,1)",
-            "#(rgb,8,8,3)color(0,0,1,1)",
-            "#(rgb,8,8,3)color(0,1,0,1)"
-        };
-	};
-    class GVAR(Roadway_2x2_45): GVAR(Roadway_2x2) {
-        displayName = "AI Path 2x2(Roadway 45°)";
-        model = QPATHTOF(models\AIPath_Roadway_2x2_45.p3d); 
+        model = QPATHTOF(models\Floor_2x2_45.p3d); 
 	};
 
 
     class GVAR(2x4): GVAR(2x2) {
         displayName = "AI Path 2x4"; 
         editorSubcategory = QGVAR(EdSubcat_2x4);
-        model = QPATHTOF(models\AIPath_2x4.p3d); 
-	};
-    class GVAR(2x4_45): GVAR(2x4) {
-        displayName = "AI Path 2x4(45°)"; 
-        model = QPATHTOF(models\AIPath_2x4_45.p3d); 
-	};
-    class GVAR(Roadway_2x4): GVAR(Roadway_2x2) {
-        displayName = "AI Path 2x4(Roadway)";
-        editorSubcategory = QGVAR(EdSubcat_2x4);
-        model = QPATHTOF(models\AIPath_Roadway_2x4.p3d); 
+        model = QPATHTOF(models\Floor_2x4.p3d); 
         hiddenSelectionsTextures[] = {
             "\z\btc\addons\aipaths\materials\dev_2x4.paa",
             "#(rgb,8,8,3)color(1,0,0,1)",
@@ -129,43 +92,31 @@ class CfgVehicles {
             "#(rgb,8,8,3)color(0,1,0,1)"
         };
 	};
-    class GVAR(Roadway_2x4_45): GVAR(Roadway_2x4) {
-        displayName = "AI Path 2x4(Roadway 45°)";
-        model = QPATHTOF(models\AIPath_Roadway_2x4_45.p3d); 
+    class GVAR(2x4_45): GVAR(2x4) {
+        displayName = "AI Path 2x4(45°)"; 
+        model = QPATHTOF(models\Floor_2x4_45.p3d); 
 	};
+
+
 
 
     class GVAR(4x2_45): GVAR(2x2) {
         displayName = "AI Path 4x2(45°)";
         editorSubcategory = QGVAR(EdSubcat_4x2);
-        model = QPATHTOF(models\AIPath_4x2_45.p3d); 
-    };
-	class GVAR(Roadway_4x2_45): GVAR(Roadway_2x2) {
-        displayName = "AI Path 4x2(Roadway 45°)";
-        editorSubcategory = QGVAR(EdSubcat_4x2);
-        model = QPATHTOF(models\AIPath_Roadway_4x2_45.p3d); 
+        model = QPATHTOF(models\Floor_4x2_45.p3d);
         hiddenSelectionsTextures[] = {
             "\z\btc\addons\aipaths\materials\dev_4x2.paa",
             "#(rgb,8,8,3)color(1,0,0,1)",
             "#(rgb,8,8,3)color(0,0,1,1)",
             "#(rgb,8,8,3)color(0,1,0,1)"
-        };
+        }; 
     };
 
 
     class GVAR(4x4): GVAR(2x2) {
         displayName = "AI Path 4x4";
         editorSubcategory = QGVAR(EdSubcat_4x4);
-        model = QPATHTOF(models\AIPath_4x4.p3d); 
-    };
-    class GVAR(4x4_45): GVAR(4x4) {
-        displayName = "AI Path 4x4(45°)";
-        model = QPATHTOF(models\AIPath_4x4_45.p3d); 
-	};
-	class GVAR(Roadway_4x4): GVAR(Roadway_2x2) {
-        displayName = "AI Path 4x4(Roadway)";
-        editorSubcategory = QGVAR(EdSubcat_4x4);
-        model = QPATHTOF(models\AIPath_Roadway_4x4.p3d); 
+        model = QPATHTOF(models\Floor_4x4.p3d); 
         hiddenSelectionsTextures[] = {
             "\z\btc\addons\aipaths\materials\dev_4x4.paa",
             "#(rgb,8,8,3)color(1,0,0,1)",
@@ -173,21 +124,16 @@ class CfgVehicles {
             "#(rgb,8,8,3)color(0,1,0,1)"
         };
     };
-    class GVAR(Roadway_4x4_45): GVAR(Roadway_4x4) {
-        displayName = "AI Path 4x4(Roadway 45°)";
-        model = QPATHTOF(models\AIPath_Roadway_4x4_45.p3d); 
+    class GVAR(4x4_45): GVAR(4x4) {
+        displayName = "AI Path 4x4(45°)";
+        model = QPATHTOF(models\Floor_4x4_45.p3d); 
 	};
 
 
     class GVAR(4x6): GVAR(2x2) {
         displayName = "AI Path 4x6";
         editorSubcategory = QGVAR(EdSubcat_4x6);
-        model = QPATHTOF(models\AIPath_4x6.p3d); 
-    };
-    class GVAR(Roadway_4x6): GVAR(Roadway_2x2) {
-        displayName = "AI Path 4x6(Roadway)";
-        editorSubcategory = QGVAR(EdSubcat_4x6);
-        model = QPATHTOF(models\AIPath_Roadway_4x6.p3d); 
+        model = QPATHTOF(models\Floor_4x6.p3d); 
         hiddenSelectionsTextures[] = {
             "\z\btc\addons\aipaths\materials\dev_4x6.paa",
             "#(rgb,8,8,3)color(1,0,0,1)",
@@ -200,37 +146,28 @@ class CfgVehicles {
     class GVAR(6x4_45): GVAR(2x2) {
         displayName = "AI Path 6x4(45°)";
         editorSubcategory = QGVAR(EdSubcat_6x4);
-        model = QPATHTOF(models\AIPath_6x4_45.p3d); 
-    };
-    class GVAR(Roadway_6x4_45): GVAR(Roadway_2x2) {
-        displayName = "AI Path 6x4(Roadway 45°)";
-        editorSubcategory = QGVAR(EdSubcat_6x4);
-        model = QPATHTOF(models\AIPath_Roadway_6x4_45.p3d);
+        model = QPATHTOF(models\Floor_6x4_45.p3d);
         hiddenSelectionsTextures[] = {
             "\z\btc\addons\aipaths\materials\dev_6x4.paa",
             "#(rgb,8,8,3)color(1,0,0,1)",
             "#(rgb,8,8,3)color(0,0,1,1)",
             "#(rgb,8,8,3)color(0,1,0,1)"
-        };
+        }; 
     };
 
 
     class GVAR(6x6): GVAR(2x2) {
         displayName = "AI Path 6x6";
         editorSubcategory = QGVAR(EdSubcat_6x6);
-        model = QPATHTOF(models\AIPath_6x6.p3d); 
-    };
-    class GVAR(Roadway_6x6): GVAR(Roadway_2x2) {
-        displayName = "AI Path 6x6(Roadway)";
-        editorSubcategory = QGVAR(EdSubcat_6x6);
-        model = QPATHTOF(models\AIPath_Roadway_6x6.p3d);
+        model = QPATHTOF(models\Floor_6x6.p3d); 
         hiddenSelectionsTextures[] = {
             "\z\btc\addons\aipaths\materials\dev_6x6.paa",
             "#(rgb,8,8,3)color(1,0,0,1)",
             "#(rgb,8,8,3)color(0,0,1,1)",
             "#(rgb,8,8,3)color(0,1,0,1)"
-        }; 
+        };
     };
+
 
     class Wall_F;
     class GVAR(Wall_4x1): Wall_F {
@@ -240,7 +177,7 @@ class CfgVehicles {
         icon = "\z\btc\addons\AIPaths\materials\iconAIObject.paa";
 		scopeCurator = 2;
 		displayName = "AI Wall 4x1";
-        model = QPATHTOF(models\AIPath_Wall_4x1.p3d); 
+        model = QPATHTOF(models\Wall_4x1.p3d); 
         editorCategory = QGVAR(EdCat_AIHelpers);
         vehicleClass = "Helpers";
         editorSubcategory = QGVAR(EdSubcat_Walls);
@@ -257,15 +194,15 @@ class CfgVehicles {
 	};
 	class GVAR(Wall_4x2): GVAR(Wall_4x1) {
 		displayName = "AI Wall 4x2"; 
-        model = QPATHTOF(models\AIPath_Wall_4x2.p3d); 
+        model = QPATHTOF(models\Wall_4x2.p3d); 
     };
     class GVAR(Wall_6x1): GVAR(Wall_4x1) {
 		displayName = "AI Wall 6x1"; 
-        model = QPATHTOF(models\AIPath_Wall_6x1.p3d); 
+        model = QPATHTOF(models\Wall_6x1.p3d); 
     };
     class GVAR(Wall_6x2): GVAR(Wall_4x1) {
 		displayName = "AI Wall 6x2"; 
-        model = QPATHTOF(models\AIPath_Wall_6x2.p3d); 
+        model = QPATHTOF(models\Wall_6x2.p3d); 
     };
 };
 
@@ -289,31 +226,20 @@ class Extended_InitPost_EventHandlers {
         };   
     };
     class GVAR(2x2_45): GVAR(2x2) {};
-    class GVAR(Roadway_2x2) : GVAR(2x2) {};
-    class GVAR(Roadway_2x2_45) : GVAR(Roadway_2x2) {};
-
 
     class GVAR(2x4): GVAR(2x2) {};
     class GVAR(2x4_45): GVAR(2x4) {};
-    class GVAR(Roadway_2x4): GVAR(2x4) {};
-    class GVAR(Roadway_2x4_45): GVAR(Roadway_2x4) {};
 
     class GVAR(4x2_45): GVAR(2x2) {};
-    class GVAR(Roadway_4x2_45): GVAR(4x2_45) {};
 
     class GVAR(4x4): GVAR(2x2) {};
     class GVAR(4x4_45): GVAR(4x4) {};
-    class GVAR(Roadway_4x4): GVAR(4x4) {};
-    class GVAR(Roadway_4x4_45): GVAR(Roadway_4x4) {};
 
     class GVAR(4x6): GVAR(2x2) {};
-    class GVAR(Roadway_4x6) : GVAR(Roadway_2x2) {};
 
     class GVAR(6x4_45): GVAR(2x2) {};
-    class GVAR(Roadway_6x4_45) : GVAR(Roadway_2x2) {};
 
     class GVAR(6x6): GVAR(2x2) {};
-    class GVAR(Roadway_6x6) : GVAR(Roadway_2x2) {};
 
     class GVAR(Wall_4x1): GVAR(2x2) {};
     class GVAR(Wall_4x2): GVAR(2x2) {};
