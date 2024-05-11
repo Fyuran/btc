@@ -4,7 +4,7 @@ Function:
     btc_AIPaths_fnc_unhideObjects
 
 Description:
-    Hides textures ingame
+    Unhides textures ingame
 
 Parameters:
     _object -

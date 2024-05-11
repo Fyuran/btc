@@ -1,10 +1,10 @@
 
 /* ----------------------------------------------------------------------------
 Function: 
-    btc_AIPaths_fnc_initPostHideObject
+    btc_AIPaths_fnc_hideObject
 
 Description:
-    Hides textures ingame
+    Hides object textures ingame and adds it to global pool of hidden objects
 
 Parameters:
     _object -
@@ -13,7 +13,7 @@ Returns:
 
 Examples:
     (begin example)
-        [cursorObject] call btc_AIPaths_fnc_initPostHideObject;
+        [cursorObject] call btc_AIPaths_fnc_hideObject;
     (end)
 
 Author:
@@ -23,18 +23,14 @@ Author:
 #include "..\script_component.hpp"
 
 params[
-    ["_object", objNull, [objNull]],
-    ["_value", true, [false, 0]]
+    ["_object", objNull, [objNull]]
 ];
-#ifdef DEBUG_MODE_FULL
-    [format ["%1, called %2 is %3 being hidden", __LINE__, _object, ["","not"] select !_value]] remoteExecCall ["systemChat", 0];
-#endif
-
-if(_value isEqualType 0) then {
-    _value = _value isEqualTo 1;
+if(!isServer) exitWith {
+    _this remoteExecCall [QFUNC(hideObject), 2];
 };
-if(!isServer) exitWith {};
-if(!_value) exitWith {};
+#ifdef DEBUG_MODE_FULL
+    [format ["%1 is being hidden", _object]] remoteExecCall ["systemChat", 0];
+#endif
 
 GVAR(objects) = missionNamespace getVariable [QGVAR(objects), []];
 
