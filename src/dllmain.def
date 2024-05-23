@@ -1,0 +1,4 @@
+LIBRARY   btc_ArmaToJSON_x64
+EXPORTS
+   RVExtension	@1
+   RVExtensionArgs	@2
