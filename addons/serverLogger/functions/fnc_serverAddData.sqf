@@ -21,21 +21,15 @@ Author:
 ---------------------------------------------------------------------------- */
 #include "..\script_component.hpp"
 
-GVAR(addData_EH) = [QGVAR(addData_EH), { 
+GVAR(addData_EH) = [QGVAR(addData_EH), {
 
-    private _name = serverName;
     private _uid = "_SERVER_";
-    if(!isDedicated) then { //listen server acts as client machine too
-        _name = name player;
-        _uid = _uid insert [-1, " " + getPlayerUID player];
-    };
-
+    if(!isDedicated) then {_uid = getPlayerUID player}; //listen servers act as both host and server
     private _data = [
-        _name,
+        "Server",
         _uid,
         diag_fps,
-        viewDistance,
-        missionName
+        viewDistance
     ];
 
     #ifdef DEBUG_MODE_FULL

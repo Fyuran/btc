@@ -31,6 +31,4 @@ class Extended_PostInit_EventHandlers {
     };
 };
 
-
-
 //class Extended_InitPost_EventHandlers {};

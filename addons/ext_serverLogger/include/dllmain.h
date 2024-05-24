@@ -4,8 +4,6 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
-#include <boost/algorithm/string.hpp>
-#include <boost/range/algorithm_ext.hpp>
 
 int strncpy_safe(char*, const char*, int);
 using String = std::string;

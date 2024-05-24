@@ -14,6 +14,14 @@ target_sources (btc_serverLogger_x64 PUBLIC
 )
 target_compile_features(btc_serverLogger_x64 PRIVATE cxx_std_14)
 
+include(FetchContent)
+FetchContent_Declare(
+  rapidcsv
+  GIT_REPOSITORY "https://github.com/d99kris/rapidcsv.git"
+)
+FetchContent_MakeAvailable(rapidcsv)
+target_link_libraries(btc_serverLogger_x64 PUBLIC rapidcsv)
+
 if(MSVC)
     target_compile_options(btc_serverLogger_x64 PRIVATE
         $<$<CONFIG:>:/MT>
@@ -44,8 +52,6 @@ if(UNIX AND NOT APPLE)
     endif()
 
 endif()
-
-
 
 MESSAGE("BOOST_ROOT ${BOOST_ROOT}")
 MESSAGE("BOOST_LIBRARYDIR ${BOOST_LIBRARYDIR}")
