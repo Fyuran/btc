@@ -21,6 +21,11 @@ target_precompile_headers(
 target_include_directories(btc_ArmaToJSON_x64 PUBLIC
                            "include"
 )
+
+target_compile_features(btc_ArmaToJSON_x64 PUBLIC cxx_std_17)
 target_link_libraries(btc_ArmaToJSON_x64 -static-libgcc -static-libstdc++)
 
-target_compile_features(btc_ArmaToJSON_x64 PUBLIC cxx_std_20)
+install(TARGETS btc_ArmaToJSON_x64 
+    RUNTIME DESTINATION "D:/SteamLibrary/steamapps/common/Arma 3"
+    LIBRARY DESTINATION "/home/fyuran/.local/share/Steam/steamcmd/arma3"
+)

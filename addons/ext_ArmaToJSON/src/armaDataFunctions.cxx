@@ -32,7 +32,7 @@ template<typename T> String arma::vecToString(const std::vector<T>& v) {
 }
 
 String arma::arrangeOutput(const std::map<String, std::vector<String>>& map) {
-    std::stringstream ss;
+    std::stringstream ss{};
     String string;
 
     if (!map.empty()) {
@@ -65,7 +65,7 @@ String arma::getData(const fs::path pathToJSON, const int outputMaxSize, String 
         for (const auto& categories : json.at(name).items()) {
             std::vector<String> elements;
             for (const auto& element : categories.value().items()) {
-                String fmt = std::format(R"(["{}", {}])", element.key(), element.value().dump());
+                String fmt{ "[\"" + element.key() + "\", " + element.value().dump() + "]" };
                 elements.push_back(fmt);
             }
             data.insert_or_assign(categories.key(), elements);
@@ -75,7 +75,7 @@ String arma::getData(const fs::path pathToJSON, const int outputMaxSize, String 
         std::vector<String> split = splitBySize(output, outputMaxSize);
         if (index != -1)
             return split.at(index);
-        else return std::format(R"([{}, {}])",split.size(), outputMaxSize);
+        else return "[" + std::to_string(split.size()) + ", " + std::to_string(outputMaxSize) + "]";
     }
     catch (const std::exception& e) {
         return e.what();

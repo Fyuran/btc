@@ -4,7 +4,7 @@
 #include "armaDataFunctions.h"
 
 constexpr auto CURRENT_VERSION = "1.0.0.0";
-using JSON = nlohmann::ordered_json;
+using JSON = nlohmann::json;
 using String = std::string;
 namespace fs = std::filesystem;
 
@@ -44,13 +44,12 @@ int RVExtensionArgs(char* output, int outputSize, const char* function, const ch
 		}
 		try {
 			filePath = arguments.at(0);
-			if (!fs::exists(filePath)) throw std::runtime_error(std::format("{} not found", filePath.string()));
+			if (!fs::exists(filePath)) throw std::runtime_error(filePath.string() + " not found");
 ;		}
 		catch (const std::exception& e) {
 			strncpy_safe(output, e.what(), outputSize);
 			return -1;
 		}
-		
 	}
 	/*DATA FUNCTIONS*/
 	if (strcmp(function, "getData") == 0) {
