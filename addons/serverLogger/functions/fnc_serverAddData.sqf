@@ -23,7 +23,7 @@ Author:
 
 GVAR(addData_EH) = [QGVAR(addData_EH), {
 
-    private _uid = "_SERVER_";
+    private _uid = serverName;
     if(!isDedicated) then {_uid = getPlayerUID player}; //listen servers act as both host and server
     private _data = [
         "Server",

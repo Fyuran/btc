@@ -16,10 +16,10 @@ namespace arma {
 
         String name;
         String uid;
-        int fps = 0;
-        int viewDistance = 0;
+        int fps;
+        int viewDistance;
 
-        logData() = delete;
+        logData() : fps{ 0 }, viewDistance{ 0 } {};
         logData(std::vector<String> v) : logData{ v.at(0), v.at(1), std::stoi(v.at(2)), std::stoi(v.at(3)) } {}
         logData(String n, String u, int f, int v) : name{ n }, uid{ u }, fps{ f }, viewDistance{ v } {}
         friend bool operator== (const logData&, const logData&);
@@ -27,7 +27,6 @@ namespace arma {
     };
 
     bool operator== (const logData&, const logData&);
-
     bool operator!= (const logData&, const logData&);
 
     struct logEntry {
@@ -38,8 +37,9 @@ namespace arma {
 
         logEntry() = delete;
         logEntry(std::vector<String>& data_entry);
-        void static saveLogData(std::vector<String>);
+        void saveLogData();
+        logData find(const String);
     };
 
-    
+    void manageLoggingArguments(std::vector<String> args);
 }

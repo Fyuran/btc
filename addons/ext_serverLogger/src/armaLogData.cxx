@@ -10,7 +10,6 @@
     viewDistance
 */
 namespace arma {
-    std::vector<logData> loggedData;
 
     bool operator== (const logData& d1, const logData& d2) {
         return d1.name == d2.name &&
@@ -20,6 +19,11 @@ namespace arma {
     }
 
     bool operator!= (const logData& d1, const logData& d2) { return !(operator==(d1, d2)); }
+
+    void manageLoggingArguments(std::vector<String> args) {
+        arma::logEntry entry{ args };
+        entry.saveLogData();
+    }
 
     logEntry::logEntry(std::vector<String>& data_entry) : timeStamp{ data_entry.at(0) }, missionName{ data_entry.at(1) } {
 
@@ -35,49 +39,68 @@ namespace arma {
         }
     }
 
-    void logEntry::saveLogData(std::vector<String> data_entry) {
-        logEntry entry{ data_entry };
+    void logEntry::saveLogData() {
 
-        std::fstream fs{ entry.missionName + ".csv"};
+        std::fstream fs{ missionName + ".csv"};
         rapidcsv::Document doc(fs, rapidcsv::LabelParams(0,0), 
             rapidcsv::SeparatorParams(),
             rapidcsv::ConverterParams(true, 0, 0));
 
-        if (fs.is_open()) {
-            std::vector<int> columnFPS;
-            for (logData ld : entry.logs) {
-                columnFPS.push_back(ld.fps);
+        /*
+        * compose FPS
+        * check if name exists with index
+        * Find name in data entry, if not found return zero
+        * else add fps
+        * if name does not exist
+        * add row full of zero up to last one
+        * 
+        * check if column exists with index, set column with edited data else add it
+        */
+        if (fs.is_open() && doc.GetColumnCount() != 0) {
 
-                //insert missing row
-                if (doc.GetRowIdx(ld.name) == -1) { //init missing cells with 0s
-                    auto firstRowDataCount = doc.GetRow<int>(0).size();
-                    std::vector<int> rowData(firstRowDataCount-1, 0); //size is a size_t allow narrowing conversion
-                    rowData.push_back(ld.fps);
-                    doc.InsertRow(doc.GetRowCount(), rowData, ld.name);
+            for (const logData& ld : logs) {
+                if (doc.GetRowIdx(ld.name) == -1) {
+                    std::vector<int> rowFPS(doc.GetColumnCount()-1, 0);
+                    rowFPS.push_back(ld.fps);
+
+                    doc.InsertRow(doc.GetRowCount(), rowFPS, ld.name);
+                }       
+            }
+
+            std::vector<int> fpsColumn(doc.GetRowCount(), 0);
+            for (unsigned int i = 0; i < doc.GetRowCount(); i++) {
+                String label = doc.GetRowName(i);
+                logData ld = find(label);
+                fpsColumn.at(i) = ld.fps;
+            }
+
+            bool isNewColumn = true;
+            for (String label : doc.GetColumnNames()) {
+                if (timeStamp == label) {
+                    doc.SetColumn(label, fpsColumn);
+                    isNewColumn = false;
                 }
             }
+            if(isNewColumn)
+                doc.InsertColumn(doc.GetColumnCount(), fpsColumn, timeStamp);
 
-            if (entry.timeStamp != "timestamp") {
-                int columnCount = doc.GetColumnCount();
-
-                int columnIdx = doc.GetColumnIdx(entry.timeStamp);
-                if (columnIdx == -1) //insert new column
-                    doc.InsertColumn(columnCount, columnFPS, entry.timeStamp);
-                else //edit column
-                    doc.SetColumn(columnIdx, columnFPS);               
-            }
-
-            doc.Save(entry.missionName + ".csv");
+            doc.Save(missionName + ".csv");
         }
         else {
-            std::ofstream of{ entry.missionName + ".csv", std::ios::out};
-            of << "timestamp," << entry.timeStamp << "\n";
-            for (const logData& ld : entry.logs) {
+            std::ofstream of{ missionName + ".csv", std::ios::out};
+            of << "timestamp," << timeStamp << "\n";
+            for (const logData& ld : logs) {
                 of << ld.name << "," << ld.fps;
-                if (ld != entry.logs.back())
+                if (ld != logs.back())
                     of << "\n";
             }
             of.close();
         }
+    }
+    logData logEntry::find(const String s) {
+        for (logData& ld : logs) {
+            if (ld.name == s) return ld;
+        }
+        return logData(); //return an empty object to draw empty data from
     }
 }

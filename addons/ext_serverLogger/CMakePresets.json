@@ -55,7 +55,7 @@
         "rhs": "Linux"
       },
       "vendor": {
-        "microsoft.com/VisualStudioRemoteSettings/CMake/3.28": {
+        "microsoft.com/VisualStudioSettings/CMake/3.29.3": {
           "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}",
           "intelliSenseMode": "linux-gcc-x64"
         }

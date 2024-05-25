@@ -1,8 +1,11 @@
 #include "dllmain.h"
 #include "armaLogData.h"
 #include <thread>
+#include <boost/range/algorithm_ext.hpp>
+#include <boost/algorithm/string.hpp>
 
 constexpr auto CURRENT_VERSION = "1.0.0.0";
+namespace BF = boost::filesystem;
 
 int strncpy_safe(char* output, const char* src, int size)
 {
@@ -32,12 +35,17 @@ int RVExtensionArgs(char* output, int outputSize, const char* function, const ch
 	for (unsigned int i = 0; i < argsCnt; i++)
 		arguments.push_back(args[i]);
 
-	
+	//String filename = arguments.at(1);
+	//boost::remove_erase_if(filename, boost::is_any_of("\""));
+	//BF::path p = BF::current_path() / filename.append(".csv");
+	//if (BF::exists(p))
+	//	BF::remove(p);
 
 	/*DATA FUNCTIONS*/
 
 	if (strcmp(function, "saveLogData") == 0) {
-		arma::logEntry::saveLogData(arguments);
+		std::thread t1{arma::manageLoggingArguments, arguments};
+		t1.detach();
 		strncpy_safe(output, "data saved", outputSize);
 		return 201;
 	}
@@ -49,3 +57,6 @@ int RVExtensionArgs(char* output, int outputSize, const char* function, const ch
 
 // "btc_serverLogger" callExtension ""
 // "btc_serverLogger" callExtension ["saveLogData",["0:00:03", "tempMissionSP", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800],["=BTC= Cpl.Raven","12325425",45,3800]]];
+// "btc_serverLogger" callExtension ["saveLogData",["0:00:03", "tempMissionSP", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800]]];
+// "btc_serverLogger" callExtension ["saveLogData",["0:00:04", "tempMissionSP", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800],["=BTC= Cpl.Raven","12325425",50,3800]]];
+// "btc_serverLogger" callExtension ["saveLogData",["0:00:05", "tempMissionSP", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Cpl.Raven","12325425",87,3800], ["=BTC= Spc.Freeman","12325425",74,3800]]];
