@@ -30,18 +30,16 @@ GVAR(PFH) = [{
     params[
         ["_delay", GVAR(logging_cooldown), [0]]
     ];
-
+    if(not GVAR(logging_isEnabled)) exitWith {};
     
     GVAR(logger_timestamp) = [CBA_missionTime] call CBA_fnc_formatElapsedTime;
-    GVAR(logger_data) = createHashMap;
 
+    GVAR(logger_data) = createHashMap;
     #ifdef DEBUG_MODE_FULL
         [format["%1: clients should be sending data...(set delay: %2)", GVAR(logger_timestamp), _delay]] remoteExecCall ["systemChat", 0];
         diag_log format ["%1: clients should be sending data...(set delay: %2)", __FILE__, _delay];
         if(!isMultiplayer) then {[QGVAR(addData_EH)] call CBA_fnc_globalEvent;}; //trigger twice for testing
-    #endif
-
-    
+    #endif 
     [QGVAR(addData_EH)] call CBA_fnc_globalEvent;
     
 }, _delay, _delay] call CBA_fnc_addPerFrameHandler;

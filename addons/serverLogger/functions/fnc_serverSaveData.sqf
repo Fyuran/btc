@@ -28,6 +28,8 @@ GVAR(server_saveData_EH) = [QGVAR(server_saveData_EH), {
         ["_fps", -1, [0]],
         ["_viewDistance", -1, [0]]
     ];
+    _fps = round _fps;
+    _viewDistance = round _viewDistance;
 
     private _data = GVAR(logger_data) getOrDefault [GVAR(logger_timestamp), []];
     
@@ -60,7 +62,7 @@ GVAR(server_saveData_EH) = [QGVAR(server_saveData_EH), {
         diag_log format["%1: dataCount: %2 playersCount: %3", __FILE__, _dataCount, _allPlayersCount];
     #endif
     if(_dataCount >= _allPlayersCount) then {
-        private _extArr = ["saveLogData", [GVAR(logger_timestamp), missionName]];
+        private _extArr = ["manageSession", [missionName, worldName, GVAR(logger_timestamp)]];
         GVAR(logger_data) apply { //compose array with separated arguments to send to extension
             _y apply {
                 (_extArr#1) pushBack _x;
@@ -70,12 +72,14 @@ GVAR(server_saveData_EH) = [QGVAR(server_saveData_EH), {
         #ifdef DEBUG_MODE_FULL
             diag_log format ["%1: sending extension array is: %2", __FILE__, _extArr];
         #endif
+
         if(count _extArr < 2) exitWith {};//do not call extension if no useful data is present
+
+        diag_log format ["%1: extension called", __FILE__, _extArr];
+        private _return = str ("btc_serverLogger" callExtension _extArr);
+
         #ifdef DEBUG_MODE_FULL
-            private _return = str ("btc_serverLogger" callExtension _extArr);
             diag_log format ["%1: extension return: %2", __FILE__, _return];
-        #else
-            "btc_serverLogger" callExtension _extArr;
         #endif
     };
 }] call CBA_fnc_addEventHandler;

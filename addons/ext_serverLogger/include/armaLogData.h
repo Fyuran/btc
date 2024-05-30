@@ -1,8 +1,7 @@
 #pragma once
 #include <string>
-#include <iostream>
 #include <vector>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 using String = std::string;
 /*
     _name
@@ -16,12 +15,29 @@ namespace arma {
 
         String name;
         String uid;
-        int fps;
-        int viewDistance;
+        String fps;
+        String viewDistance;
 
-        logData() : fps{ 0 }, viewDistance{ 0 } {};
-        logData(std::vector<String> v) : logData{ v.at(0), v.at(1), std::stoi(v.at(2)), std::stoi(v.at(3)) } {}
-        logData(String n, String u, int f, int v) : name{ n }, uid{ u }, fps{ f }, viewDistance{ v } {}
+        logData() {};
+        logData(std::vector<String> v) : logData{ v.at(0), v.at(1), v.at(2), v.at(3)} {}
+        logData(String n, String u, String f, String v) : uid{ u }, fps{ f }, viewDistance{ v } {
+            if(n.at(0) == '=')
+                n.insert(0, " "); //if name starts with an equal sign such as =BTC= Cpt.Ramius most excel-like programs will throw a fit
+            name = n;
+        }
+        logData(logData& other) : name{ other.name }, uid{ other.uid }, fps{ other.fps }, viewDistance{ other.viewDistance } {}
+        logData(logData&& other) noexcept : name{ other.name }, uid{ other.uid }, fps{ other.fps }, viewDistance{ other.viewDistance }  {}
+        logData& operator=(logData&& other) noexcept {
+            if (this == &other) return *this;
+
+            name = other.name;
+            uid = other.uid;
+            fps = other.fps;
+            viewDistance = other.viewDistance;
+
+            return *this;
+        }
+
         friend bool operator== (const logData&, const logData&);
         friend bool operator!= (const logData&, const logData&);
     };
@@ -31,8 +47,9 @@ namespace arma {
 
     struct logEntry {
 
-        String& missionName;
-        String& timeStamp;   
+        String missionName;
+        String worldName;
+        String timeStamp;
         std::vector<logData> logs;
 
         logEntry() = delete;
@@ -41,5 +58,8 @@ namespace arma {
         logData find(const String);
     };
 
-    void manageLoggingArguments(std::vector<String> args);
+    std::filesystem::path getCurrentPath(const logEntry& entry);
+    std::vector<String> getCurrentDate();
+    void manageSession(std::vector<String> args);
+    void manageNewSession(std::vector<String> args);
 }

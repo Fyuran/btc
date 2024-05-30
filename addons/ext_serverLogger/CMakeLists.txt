@@ -3,28 +3,27 @@
 project ("btc_serverLogger_x64"
     LANGUAGES CXX
 )
+include(FetchContent)
 
 add_library (btc_serverLogger_x64 SHARED)
-target_include_directories(btc_serverLogger_x64 PUBLIC
+target_include_directories(btc_serverLogger_x64 PRIVATE
     "include"
 )
-target_sources (btc_serverLogger_x64 PUBLIC 
+target_sources (btc_serverLogger_x64 PRIVATE 
     "src/dllmain.cxx"
     "src/dllmain.def"
     "src/armaLogData.cxx"
 )
-target_compile_features(btc_serverLogger_x64 PUBLIC cxx_std_14)
+target_compile_features(btc_serverLogger_x64 PRIVATE cxx_std_17)
 
-include(FetchContent)
 FetchContent_Declare(
   rapidcsv
   GIT_REPOSITORY "https://github.com/d99kris/rapidcsv.git"
 )
 FetchContent_MakeAvailable(rapidcsv)
-target_link_libraries(btc_serverLogger_x64 PUBLIC rapidcsv)
 
 if(MSVC)
-    target_compile_options(btc_serverLogger_x64 PUBLIC
+    target_compile_options(btc_serverLogger_x64 PRIVATE
         $<$<CONFIG:>:/MT>
         $<$<CONFIG:Debug>:/MTd>
         $<$<CONFIG:Release>:/MT>
@@ -41,8 +40,8 @@ if(WIN32)
 endif()
 
 if(UNIX AND NOT APPLE)
-    target_link_options(btc_serverLogger_x64 PUBLIC -static-libgcc -static-libstdc++)
+    target_link_options(btc_serverLogger_x64 PRIVATE -static-libgcc -static-libstdc++)
 endif()
 
-find_package(Boost 1.85 COMPONENTS filesystem REQUIRED)
-target_link_libraries(btc_serverLogger_x64 PUBLIC Boost::filesystem)
+find_package(Boost 1.85 COMPONENTS date_time REQUIRED)
+target_link_libraries(btc_serverLogger_x64 PRIVATE Boost::date_time rapidcsv)
