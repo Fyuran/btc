@@ -4,9 +4,6 @@
 #include "armaDataFunctions.h"
 
 constexpr auto CURRENT_VERSION = "1.0.0.0";
-using JSON = nlohmann::json;
-using String = std::string;
-namespace fs = std::filesystem;
 
 int strncpy_safe(char* output, const char* src, int size)
 {
@@ -60,8 +57,7 @@ int RVExtensionArgs(char* output, int outputSize, const char* function, const ch
 		String name{ arguments.at(1) };
 		int index = stoi(arguments.at(2));
 
-		//Arma 3 2.14150957 outputSize is currently 20480 bytes
-		strncpy_safe(output, arma::getData(filePath, 20480-240, name, index).c_str(), outputSize);
+		strncpy_safe(output, arma::getData(filePath, outputSize-240, name, index).c_str(), outputSize);
 		return 202;
 	}
 	/*FILESYSTEM FUNCTIONS*/

@@ -1,126 +1,156 @@
 #include "armaFileFunctions.h"
+#include <boost/date_time.hpp>
 
-String arma::currentDateTime() {
-	time_t now = time(0);
-	tm tstruct = *localtime(&now);
-	char buf[80];
-	// Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
-	// for more information about date/time format
-	strftime(buf, sizeof(buf), "%H-%M %d-%m-%Y", &tstruct);
+namespace arma {
 
-	return buf;
-}
+	String getCurrentDateTime() {
 
-String arma::currentDate = { arma::currentDateTime() };
+		std::ostringstream ss;
+		boost::posix_time::ptime system_time{ boost::posix_time::second_clock::local_time() };
+		boost::gregorian::date sDate{ system_time.date() };
 
-String arma::copyFile(const fs::path& filePath)
-{
+		auto date_facet = new boost::gregorian::date_facet{ "%d-%m-%Y" };
+		ss.imbue(std::locale(ss.getloc(), date_facet));
+		ss << sDate << " ";
 
-	String filePathFull = filePath.filename().string(); //Get the name portion without the timestamp from file
-	String name;
-	std::stringstream ss;
-	ss << filePathFull;  
-	ss >> name; //terminates extraction once whitespace is reached
-	String backupSuffix{ name + " (" + arma::currentDate + ").JSON" };
-	fs::path backupFilePath{ backupSuffix };
+		auto time_facet = new boost::posix_time::time_facet;
+		time_facet->time_duration_format("%H-%M");
+		ss.imbue(std::locale(ss.getloc(), time_facet));
+		ss << system_time.time_of_day();
 
-	bool hasCopied = false;
-	try {
-		hasCopied = fs::copy_file(filePath, backupFilePath, fs::copy_options::overwrite_existing);
+		return ss.str();
 	}
-	catch (std::exception& e) {
-		return e.what();
-	}
-	
-	String out{ fs::absolute(filePath).string() };
-	if (hasCopied)
-		out += "<br/>A copy has been made: " + backupFilePath.filename().string() + "<br/>"; // <br/> will be used by Arma formatText
-	else
-		out += "<br/>No copy could be made.<br/>";
 
-	return out;
-}
+	String copyFile(const fs::path& filePath)
+	{
 
-
-String arma::writeFile(const char* function) {
-	String fileNameFull;
-	JSON json;
-
-	try {
+		String filePathFull = filePath.filename().string(); //Get the name portion without the timestamp from file
+		String name;
 		std::stringstream ss;
-		ss << function; //btc_hm_%1 {JSON HERE}, .JSON will be later appended
-		ss >> fileNameFull >> json;
+		ss << filePathFull;  
+		ss >> name; //terminates extraction once whitespace is reached
+		String backupSuffix{ name + " (" + getCurrentDateTime() + ").JSON" };
+		fs::path backupFilePath{ backupSuffix };
 
-		if (fileNameFull.empty()) throw std::invalid_argument("invalid file name");
-
-		fileNameFull += " (" + arma::currentDate + ").JSON" ;
-	}
-	catch (const std::exception& e) {
-		return e.what();
-	}
-
-	std::promise<bool> p;
-	std::future<bool> f{ p.get_future() };
-
-	std::thread thread1([&]() {
-
-		std::ofstream jsonFile{ fileNameFull };
-		if (jsonFile) {
-			jsonFile << std::setw(4) << json;
-			jsonFile.close();
-
-			p.set_value_at_thread_exit(!(jsonFile.is_open()));
+		bool hasCopied = false;
+		try {
+			hasCopied = fs::copy_file(filePath, backupFilePath, fs::copy_options::overwrite_existing);
 		}
-		});
-	thread1.detach();
+		catch (std::exception& e) {
+			return e.what();
+		}
+	
+		String out{ fs::absolute(filePath).string() };
+		if (hasCopied)
+			out += "<br/>A copy has been made: " + backupFilePath.filename().string() + "<br/>"; // <br/> will be used by Arma formatText
+		else
+			out += "<br/>No copy could be made.<br/>";
 
-	bool hasWrittenToFile{ f.get() };
-
-	fs::path filePath{ fileNameFull };
-	if (hasWrittenToFile) return fs::absolute(filePath).string();
-	else return "";
-}
-
-String arma::retrieveList()
-{
-	const fs::directory_iterator dir{"."};
-	std::vector<String> vecDirs;
-
-	for (const auto& p : dir) {
-		const String ext{ p.path().extension().string() };
-		if (ext == ".JSON")
-			vecDirs.push_back(fs::absolute(p.path()).string());	 
+		return out;
 	}
 
-	return arma::to_string(vecDirs);
-}
 
+	String writeFile(const char* function) {
+		String fileNameFull;
+		JSON json;
 
-String arma::to_string(const std::vector<String>& vec) {
-	std::stringstream ss;
-	ss << "[";
-	for (const auto& el : vec) {
-		ss << R"(")" << el << R"(")" << (el != vec.back() ? ", " : ""); // ["ELEMENT1", "ELEMENT2",...]
+		try {
+			std::stringstream ss;
+			ss << function; //btc_hm_${worldName} ${JSON}
+			ss >> fileNameFull >> json;
+
+			if (fileNameFull.empty()) throw std::invalid_argument("invalid file name");
+
+			fileNameFull += " (" + getCurrentDateTime() + ").JSON" ;
+		}
+		catch (const std::exception& e) {
+			return e.what();
+		}
+
+		std::promise<bool> p;
+		std::future<bool> f{ p.get_future() };
+		std::filesystem::path filePath{ fs::current_path() / "JSON" / fileNameFull};
+
+		std::thread thread1([&]() {
+			if (!fs::exists(filePath.parent_path()))
+				fs::create_directories(filePath.parent_path());
+			std::ofstream jsonFile{ filePath };
+			if (jsonFile) {
+				jsonFile << std::setw(4) << json;
+				jsonFile.close();
+
+				p.set_value_at_thread_exit(!(jsonFile.is_open()));
+			}
+			});
+		thread1.detach();
+
+		bool hasWrittenToFile{ f.get() };
+
+		if (hasWrittenToFile) return filePath.string();
+		else return "";
 	}
-	ss << "]";
 
-	return ss.str();
-}
+	const String retrieveList()
+	{
+		const std::filesystem::path filePath{ fs::current_path() / "JSON" };
+		if(!fs::exists(filePath))
+			fs::create_directories(filePath);
+		const fs::directory_iterator dir{ filePath };
+		std::vector<String> vecDirs;
 
-String arma::deleteFile(const fs::path& filePath) {
-	String fileNameFull{ filePath.filename().string() };
+		try {
+			for (const auto& p : dir) {
+				const String ext{ p.path().extension().string() };
+				if (ext == ".JSON")
+					vecDirs.push_back(fs::absolute(p.path()).string());
+			}
+		}
+		catch (const std::exception& e) {
+			return e.what();
+		}
 
-	fs::remove(filePath);
 
-	return fileNameFull + " has been deleted";
-}
+		return to_string(vecDirs);
+	}
 
-String arma::renameFile(const fs::path& filePath, String name) {
-	name += " (" + arma::currentDate + ").JSON";
 
-	fs::path newFilePath{ name };
+	String to_string(const std::vector<String>& vec) {
+		std::stringstream ss;
+		ss << "[";
+		for (const auto& el : vec) {
+			ss << R"(")" << el << R"(")" << (el != vec.back() ? ", " : ""); // ["ELEMENT1", "ELEMENT2",...]
+		}
+		ss << "]";
 
-	fs::rename(filePath, newFilePath);
+		return ss.str();
+	}
 
-	return fs::absolute(newFilePath).string();
+	String deleteFile(const fs::path& filePath) {
+		String fileNameFull{ filePath.filename().string() };
+
+		try {
+			fs::remove(filePath);
+		}
+		catch (const std::exception& e) {
+			return e.what();
+		}
+
+		return fileNameFull + " has been deleted";
+	}
+
+	String renameFile(const fs::path& filePath, String name) {
+		name += " (" + getCurrentDateTime() + ").JSON";
+
+		fs::path newFilePath{ name };
+
+		try {
+			fs::rename(filePath, newFilePath);
+		}
+		catch (const std::exception& e) {
+			return e.what();
+		}
+		
+		return fs::absolute(newFilePath).string();
+	}
+
 }

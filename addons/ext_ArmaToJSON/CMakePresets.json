@@ -7,17 +7,14 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/out/build/${presetName}",
       "installDir": "${sourceDir}/out/install/${presetName}",
-      "cacheVariables": {
-        "CMAKE_CXX_FLAGS": "/DWIN32 /D_WINDOWS /D_CRT_SECURE_NO_WARNINGS /EHsc",
-        "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": false
-      },
+      "cacheVariables": {},
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
         "rhs": "Windows"
       },
       "vendor": {
-        "microsoft.com/VisualStudioSettings/CMake/3.28": {
+        "microsoft.com/VisualStudioSettings/CMake/3.29.3": {
           "intelliSenseMode": "windows-msvc-x64"
         }
       }
@@ -50,9 +47,7 @@
       "installDir": "${sourceDir}/out/install/${presetName}",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_C_COMPILER": "gcc",
-        "CMAKE_CXX_COMPILER": "g++",
-        "CMAKE_SHARED_LIBRARY_PREFIX_CXX" :  ""
+        "CMAKE_SHARED_LIBRARY_PREFIX_CXX": ""
       },
       "condition": {
         "type": "equals",
@@ -60,15 +55,15 @@
         "rhs": "Linux"
       },
       "vendor": {
-        "microsoft.com/VisualStudioRemoteSettings/CMake/3.28": {
+        "microsoft.com/VisualStudioSettings/CMake/3.29.3": {
           "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}",
           "intelliSenseMode": "linux-gcc-x64"
         }
       }
     },
     {
-      "name": "linux-x64-release",
-      "displayName": "Linux x64 Release",
+      "name": "linux-release",
+      "displayName": "Linux Release",
       "inherits": "linux-debug",
       "architecture": {
         "value": "x64",
@@ -77,6 +72,28 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "windows-debug-build",
+      "displayName": "Build Windows Debug",
+      "configurePreset": "x64-debug"
+    },
+    {
+      "name": "windows-release-build",
+      "displayName": "Build Windows Release",
+      "configurePreset": "x64-release"
+    },
+    {
+      "name": "linux-debug-build",
+      "displayName": "Build Linux Debug",
+      "configurePreset": "linux-debug"
+    },
+    {
+      "name": "linux-release-build",
+      "displayName": "Build Linux Release",
+      "configurePreset": "linux-release"
     }
   ]
 }

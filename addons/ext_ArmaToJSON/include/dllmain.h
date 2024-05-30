@@ -1,4 +1,7 @@
 #pragma once
+using JSON = nlohmann::json;
+using String = std::string;
+namespace fs = std::filesystem;
 
 using armaCallbackPtr = int(*)(char const*, char const*, char const*);
 int strncpy_safe(char*, const char*, int);
