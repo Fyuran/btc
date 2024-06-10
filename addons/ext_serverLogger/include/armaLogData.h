@@ -2,7 +2,10 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <boost/date_time/posix_time/posix_time.hpp>
+
 using String = std::string;
+using pTime = boost::posix_time::ptime;
 /*
     _name
     _uid
@@ -15,16 +18,13 @@ namespace arma {
 
         String name;
         String uid;
-        String fps;
-        String viewDistance;
+        int fps = 0;
+        int viewDistance = 0;
+        boost::posix_time::ptime timestamp = boost::posix_time::second_clock::local_time();
 
         logData() {};
-        logData(std::vector<String> v) : logData{ v.at(0), v.at(1), v.at(2), v.at(3)} {}
-        logData(String n, String u, String f, String v) : uid{ u }, fps{ f }, viewDistance{ v } {
-            if(n.at(0) == '=')
-                n.insert(0, " "); //if name starts with an equal sign such as =BTC= Cpt.Ramius most excel-like programs will throw a fit
-            name = n;
-        }
+        logData(std::vector<String> v) : logData{ v.at(0), v.at(1), stoi(v.at(2)), stoi(v.at(3)) } {}
+        logData(String n, String u, int f, int v) : name{ n }, uid{ u }, fps{ f }, viewDistance{ v } {}
         logData(logData& other) : name{ other.name }, uid{ other.uid }, fps{ other.fps }, viewDistance{ other.viewDistance } {}
         logData(logData&& other) noexcept : name{ other.name }, uid{ other.uid }, fps{ other.fps }, viewDistance{ other.viewDistance }  {}
         logData& operator=(logData&& other) noexcept {
@@ -42,24 +42,18 @@ namespace arma {
         friend bool operator!= (const logData&, const logData&);
     };
 
-    bool operator== (const logData&, const logData&);
-    bool operator!= (const logData&, const logData&);
-
     struct logEntry {
 
         String missionName;
         String worldName;
-        String timeStamp;
         std::vector<logData> logs;
 
         logEntry() = delete;
         logEntry(std::vector<String>& data_entry);
-        void saveLogData();
         logData find(const String);
+        const std::filesystem::path getCurrentFilePath() const;
     };
 
-    std::filesystem::path getCurrentPath(const logEntry& entry);
-    std::vector<String> getCurrentDate();
-    void manageSession(std::vector<String> args);
-    void manageNewSession(std::vector<String> args);
+    bool operator== (const logData&, const logData&);
+    bool operator!= (const logData&, const logData&);
 }

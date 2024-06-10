@@ -62,7 +62,7 @@ GVAR(server_saveData_EH) = [QGVAR(server_saveData_EH), {
         diag_log format["%1: dataCount: %2 playersCount: %3", __FILE__, _dataCount, _allPlayersCount];
     #endif
     if(_dataCount >= _allPlayersCount) then {
-        private _extArr = ["manageSession", [missionName, worldName, GVAR(logger_timestamp)]];
+        private _extArr = ["manageSession", [missionName, worldName]];
         GVAR(logger_data) apply { //compose array with separated arguments to send to extension
             _y apply {
                 (_extArr#1) pushBack _x;

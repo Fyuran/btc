@@ -1,5 +1,5 @@
 #include "dllmain.h"
-#include "armaLogData.h"
+#include "armaLogFncs.h"
 #include <thread>
 
 constexpr auto CURRENT_VERSION = "1.0.0.0";
@@ -47,20 +47,14 @@ int RVExtensionArgs(char* output, int outputSize, const char* function, const ch
 		strncpy_safe(output, "data saved", outputSize);
 		return 201;
 	}
-	if (strcmp(function, "manageNewSession") == 0) {
-		std::thread t1{ arma::manageNewSession, arguments };
-		t1.detach();
-		strncpy_safe(output, "new session started", outputSize);
-		return 201;
-	}
 
 	/*---------------------*/
 	strncpy_safe(output, "Available functions: manageSession, manageNewSession", outputSize);
 	return -1;
 }
 
-// "btc_serverLogger" callExtension ["manageNewSession", ["tempMissionSP", "Altis", "00:00:00", ["Server", "test", 0, 0]]];
-// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", "0:00:03", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800],["=BTC= Cpl.Raven","12325425",45,3800]]];
-// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", "0:00:03", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800]]];
-// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", "0:00:04", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800],["=BTC= Cpl.Raven","12325425",50,3800]]];
-// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", "0:00:05", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Cpl.Raven","12325425",87,3800], ["=BTC= Spc.Freeman","12325425",74,3800]]];
+// "btc_serverLogger" callExtension ["manageSession", ["tempMissionSP", "Altis", ["Server", "test", 0, 0]]];
+// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800],["=BTC= Cpl.Raven","12325425",45,3800]]];
+// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800]]];
+// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800],["=BTC= Cpl.Raven","12325425",50,3800]]];
+// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Cpl.Raven","12325425",87,3800], ["=BTC= Spc.Freeman","12325425",74,3800]]];

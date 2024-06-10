@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.29.3)
+﻿cmake_minimum_required (VERSION 3.28)
 
 project ("btc_serverLogger_x64"
     LANGUAGES CXX
@@ -9,18 +9,16 @@ add_library (btc_serverLogger_x64 SHARED)
 target_include_directories(btc_serverLogger_x64 PRIVATE
     "include"
 )
+
 target_sources (btc_serverLogger_x64 PRIVATE 
     "src/dllmain.cxx"
     "src/dllmain.def"
     "src/armaLogData.cxx"
-)
+    "src/armaLogFncs.cxx")
 target_compile_features(btc_serverLogger_x64 PRIVATE cxx_std_17)
 
-FetchContent_Declare(
-  rapidcsv
-  GIT_REPOSITORY "https://github.com/d99kris/rapidcsv.git"
-)
-FetchContent_MakeAvailable(rapidcsv)
+FetchContent_Declare(json URL https://github.com/nlohmann/json/archive/refs/tags/v3.11.3.zip)
+FetchContent_MakeAvailable(json)
 
 if(MSVC)
     target_compile_options(btc_serverLogger_x64 PRIVATE
@@ -44,4 +42,4 @@ if(UNIX AND NOT APPLE)
 endif()
 
 find_package(Boost 1.85 COMPONENTS date_time REQUIRED)
-target_link_libraries(btc_serverLogger_x64 PRIVATE Boost::date_time rapidcsv)
+target_link_libraries(btc_serverLogger_x64 PRIVATE Boost::date_time nlohmann_json::nlohmann_json)
