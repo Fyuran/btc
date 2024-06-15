@@ -21,9 +21,7 @@ Author:
 ---------------------------------------------------------------------------- */
 #include "..\script_component.hpp"
 
-GVAR(JIP_Clients_EH_ID) = [{
-    if(!hasInterface) exitWith {}; //headless clients are excluded
-    
+GVAR(JIP_Clients_EH_ID) = [{  
     GVAR(addData_EH) = [QGVAR(addData_EH), { 
 
         private _data = [

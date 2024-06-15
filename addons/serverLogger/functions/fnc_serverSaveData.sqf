@@ -33,10 +33,12 @@ GVAR(server_saveData_EH) = [QGVAR(server_saveData_EH), {
 
     private _data = GVAR(logger_data) getOrDefault [GVAR(logger_timestamp), []];
     
-    _name = _name regexReplace[",", "."]; //replace commas with dots as commas are used as separator in extension
-    if((_name select [0]) isEqualTo "=") then {
-        _name = _name insert [0, "'"] //add a single quote to escape equal sign = in .csv files
-    };
+    //_name = _name regexReplace[",", "."]; //replace commas with dots as commas are used as separator in extension
+    // if((_name select [0]) isEqualTo "=") then {
+    //     _name = _name insert [0, "'"] //add a single quote to escape equal sign = in .csv files
+    // };
+    //_name = format["%1 (VD:%2)", _name, _viewDistance];
+
     _data pushBack [
         _name,
         _uid,
@@ -51,7 +53,7 @@ GVAR(server_saveData_EH) = [QGVAR(server_saveData_EH), {
 
     GVAR(logger_data) set [GVAR(logger_timestamp), _data];
 
-    private _allPlayersCount = count (allPlayers - entities "HeadlessClient_F");
+    private _allPlayersCount = count allPlayers;
     if(isDedicated) then { //add 1 to count of _allPlayers as server data is being added, unecessary on listen servers
         _allPlayersCount = _allPlayersCount + 1;
     };
@@ -62,7 +64,7 @@ GVAR(server_saveData_EH) = [QGVAR(server_saveData_EH), {
         diag_log format["%1: dataCount: %2 playersCount: %3", __FILE__, _dataCount, _allPlayersCount];
     #endif
     if(_dataCount >= _allPlayersCount) then {
-        private _extArr = ["manageSession", [missionName, worldName]];
+        private _extArr = ["manageSession", [missionName, worldName, count entities "CAManBase", count agents]];
         GVAR(logger_data) apply { //compose array with separated arguments to send to extension
             _y apply {
                 (_extArr#1) pushBack _x;

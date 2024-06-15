@@ -46,6 +46,8 @@ namespace arma {
 
         String missionName;
         String worldName;
+        int countUnits = 0;
+        int countAgents = 0;
         std::vector<logData> logs;
 
         logEntry() = delete;

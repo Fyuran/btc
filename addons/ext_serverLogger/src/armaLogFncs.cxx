@@ -18,7 +18,7 @@ namespace arma {
         }
         else
             fs::create_directories(path.parent_path());
-        
+
         for (const logData& ld : entry.logs) {
             json obj{
                 {"name", ld.name},
@@ -27,6 +27,12 @@ namespace arma {
                 {"viewDistance", ld.viewDistance},
                 {"timestamp", boost::posix_time::to_iso_extended_string(ld.timestamp)}
             };
+
+            if (ld.name == "Server") {
+                obj.emplace("units", entry.countUnits);
+                obj.emplace("agents", entry.countAgents);
+            }
+
             j.push_back(obj);
         }
 

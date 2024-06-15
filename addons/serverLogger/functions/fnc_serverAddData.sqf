@@ -31,7 +31,6 @@ GVAR(addData_EH) = [QGVAR(addData_EH), {
         diag_fps,
         viewDistance
     ];
-
     #ifdef DEBUG_MODE_FULL
         private _timestamp = [CBA_missionTime] call CBA_fnc_formatElapsedTime;
         [format["%1: server adding its data", _timestamp]] remoteExecCall ["systemChat", 0];

@@ -2,7 +2,7 @@
 #include "armaLogFncs.h"
 #include <thread>
 
-constexpr auto CURRENT_VERSION = "1.0.0.0";
+constexpr auto CURRENT_VERSION = "1.1.0.0 JSON";
 
 int strncpy_safe(char* output, const char* src, int size)
 {
@@ -23,7 +23,7 @@ void RVExtensionVersion(char* output, int outputSize) {
 }
 
 void RVExtension(char* output, int outputSize, const char* function) {
-	strncpy_safe(output, "use RVExtensionArgs, available functions: manageSession, manageNewSession", outputSize);
+	strncpy_safe(output, "use RVExtensionArgs, available functions: manageSession", outputSize);
 }
 
 //"extension" callExtension["function", ["arguments"...]]
@@ -53,8 +53,4 @@ int RVExtensionArgs(char* output, int outputSize, const char* function, const ch
 	return -1;
 }
 
-// "btc_serverLogger" callExtension ["manageSession", ["tempMissionSP", "Altis", ["Server", "test", 0, 0]]];
-// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800],["=BTC= Cpl.Raven","12325425",45,3800]]];
-// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800]]];
-// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Col.Giallustio","12325425",45,3800],["=BTC= Cpl.Raven","12325425",50,3800]]];
-// "btc_serverLogger" callExtension ["manageSession",["tempMissionSP", "Altis", ["=BTC= Cpl.Fyuran","_SERVER_",80,3800],["=BTC= Cpt.Ramius","12325425",56,3800],["=BTC= Cpl.Raven","12325425",87,3800], ["=BTC= Spc.Freeman","12325425",74,3800]]];
+// "btc_serverLogger" callExtension ["manageSession", ["tempMissionSP", "Altis", 20, 5, ["Server (VD:1200)", "test server", 100, 1200],["=BTC= Cpl.Fyuran (VD:3800)","12154151",80,3800],["=BTC= Cpt.Ramius (VD:2200)","12325425",56,3800],["=BTC= Col.Giallustio (VD:1200)","12325425",45,3800]]];

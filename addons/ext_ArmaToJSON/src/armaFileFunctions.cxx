@@ -6,17 +6,11 @@ namespace arma {
 	String getCurrentDateTime() {
 
 		std::ostringstream ss;
-		boost::posix_time::ptime system_time{ boost::posix_time::second_clock::local_time() };
-		boost::gregorian::date sDate{ system_time.date() };
+		boost::posix_time::ptime time{ boost::posix_time::second_clock::local_time() };
 
-		auto date_facet = new boost::gregorian::date_facet{ "%d-%m-%Y" };
-		ss.imbue(std::locale(ss.getloc(), date_facet));
-		ss << sDate << " ";
-
-		auto time_facet = new boost::posix_time::time_facet;
-		time_facet->time_duration_format("%H-%M");
+		auto time_facet = new boost::posix_time::time_facet{ "%d-%m-%Y %H-%M" };
 		ss.imbue(std::locale(ss.getloc(), time_facet));
-		ss << system_time.time_of_day();
+		ss << time;
 
 		return ss.str();
 	}

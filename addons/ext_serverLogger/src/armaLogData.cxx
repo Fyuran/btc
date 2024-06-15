@@ -29,8 +29,10 @@ namespace arma {
 
         missionName = data_entry.at(0);
         worldName = data_entry.at(1);
+        countUnits = stoi(data_entry.at(2));
+        countAgents = stoi(data_entry.at(3));
 
-        std::vector<String> data{ data_entry.cbegin() + 2, data_entry.cend() };
+        std::vector<String> data{ data_entry.cbegin() + 4, data_entry.cend() };
         for (const String& s : data) {
             String copy{ s };
             std::vector<String> splits;
