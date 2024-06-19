@@ -14,8 +14,8 @@ target_sources (btc_serverLogger_x64 PRIVATE
     "src/dllmain.cxx"
     "src/dllmain.def"
     "src/armaLogData.cxx"
-    "src/armaLogFncs.cxx")
-target_compile_features(btc_serverLogger_x64 PRIVATE cxx_std_17)
+    )
+target_compile_features(btc_serverLogger_x64 PRIVATE cxx_std_20)
 
 FetchContent_Declare(json URL https://github.com/nlohmann/json/archive/refs/tags/v3.11.3.zip)
 FetchContent_MakeAvailable(json)
@@ -41,5 +41,5 @@ if(UNIX AND NOT APPLE)
     target_link_options(btc_serverLogger_x64 PRIVATE -static-libgcc -static-libstdc++)
 endif()
 
-find_package(Boost 1.85 COMPONENTS date_time REQUIRED)
-target_link_libraries(btc_serverLogger_x64 PRIVATE Boost::date_time nlohmann_json::nlohmann_json)
+find_package(Boost 1.85 REQUIRED)
+target_link_libraries(btc_serverLogger_x64 PRIVATE Boost::boost nlohmann_json::nlohmann_json)

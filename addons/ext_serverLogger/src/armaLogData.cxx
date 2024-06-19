@@ -1,15 +1,16 @@
 #include "armaLogData.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/range/algorithm_ext.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <fstream>
-
+#include <nlohmann/json.hpp>
 /*
     name
     uid
     fps
     viewDistance
 */
+using json = nlohmann::json;
+namespace fs = std::filesystem;
 
 namespace arma {
 
@@ -49,13 +50,63 @@ namespace arma {
         return logData(); //return an empty object to draw empty data from
     }
 
-    extern std::vector<String> localDateToVec();
+    void manageSession(std::vector<String> args) {
 
-    const std::filesystem::path logEntry::getCurrentFilePath() const {
-        auto vecDate = localDateToVec();
+        arma::logEntry entry{ args };
 
+        auto path = getCurrentFilePath(entry);
+        json j;
+        if (fs::exists(path)) {
+            std::ifstream is{ path };
+            is >> j;
+            is.close();
+        }
+        else
+            fs::create_directories(path.parent_path());
+
+        auto timestamp = currentDateTime("%Y-%m-%dT%H:%M:%S");
+        for (const logData& ld : entry.logs) {
+            
+            json obj{
+                {"name", ld.name},
+                {"uid", ld.uid},
+                {"fps", ld.fps},
+                {"viewDistance", ld.viewDistance},
+                {"timestamp", timestamp}
+            };
+
+            if (ld.name == "Server") {
+                obj.push_back({ "units", entry.countUnits });
+                obj.push_back({ "agents", entry.countAgents });
+            }
+
+            j.push_back(obj);
+        }
+
+        std::ofstream os{ path };
+        if (os) {
+            os << std::setw(4) << j;
+            os.close();
+        }
+    }
+
+    String currentDateTime(const char* fmt) {
+
+        time_t now = time(0);
+        struct tm tstruct;
+        char buf[80];
+        tstruct = *localtime(&now);
+
+        strftime(buf, sizeof(buf), fmt, &tstruct); //http://en.cppreference.com/w/cpp/chrono/c/strftime
+        //YYYY MM DD HH MM  "%Y %m %d %H %M %S"
+        //ISO-EXT "YYYY-MM-DDThh:mm:ss" 
+        return buf;
+    }
+
+
+    const std::filesystem::path getCurrentFilePath(const logEntry& le) {
         std::filesystem::path filePath{ std::filesystem::current_path() /
-            "serverLogger" / worldName / vecDate.at(2) / vecDate.at(1) / vecDate.at(0) / (missionName + ".JSON") };
+            "serverLogger" / le.worldName / currentDateTime("%Y/%m/%d") / (le.missionName + ".JSON") };
 
         return filePath;
     }
