@@ -75,40 +75,49 @@ class CfgVehicles {
             QPATHTOF(materials\btc_AIPaths_dev_floor_CA.paa)
         };
         editorSubcategory = QGVAR(EdSubcat_Straight);
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_2x2.jpg);
 	};
     class GVAR(2x4): GVAR(2x2) {
         displayName = "AI Path 2x4"; 
         model = QPATHTOF(models\btc_AIPaths_Floor_2x4.p3d); 
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_2x4.jpg);
 	};
     class GVAR(4x4): GVAR(2x2) {
         displayName = "AI Path 4x4";
-        model = QPATHTOF(models\btc_AIPaths_Floor_4x4.p3d); 
+        model = QPATHTOF(models\btc_AIPaths_Floor_4x4.p3d);
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_4x4.jpg);
     };
     class GVAR(6x6): GVAR(2x2) {
         displayName = "AI Path 6x6";
         model = QPATHTOF(models\btc_AIPaths_Floor_6x6.p3d); 
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_6x6.jpg);
     };
 
     class GVAR(2x2_45): GVAR(2x2) {
         displayName = "AI Path 2x2(45°)";
         model = QPATHTOF(models\btc_AIPaths_Floor_2x2_45.p3d); 
         editorSubcategory = QGVAR(EdSubcat_Slope);
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_2x2_45.jpg);
 	};
     class GVAR(2x4_45): GVAR(2x2_45) {
         displayName = "AI Path 2x4(45°)"; 
-        model = QPATHTOF(models\btc_AIPaths_Floor_2x4_45.p3d); 
+        model = QPATHTOF(models\btc_AIPaths_Floor_2x4_45.p3d);
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_2x4_45.jpg);
 	};
     class GVAR(4x2_45): GVAR(2x2_45) {
         displayName = "AI Path 4x2(45°)";
         model = QPATHTOF(models\btc_AIPaths_Floor_4x2_45.p3d);
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_4x2_45.jpg);
     };
     class GVAR(4x4_45): GVAR(2x2_45) {
         displayName = "AI Path 4x4(45°)";
-        model = QPATHTOF(models\btc_AIPaths_Floor_4x4_45.p3d); 
+        model = QPATHTOF(models\btc_AIPaths_Floor_4x4_45.p3d);
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_4x4_45.jpg);
 	};
     class GVAR(4x8_45): GVAR(2x2_45) {
         displayName = "AI Path 4x8(45°)";
         model = QPATHTOF(models\btc_AIPaths_Floor_4x8_45.p3d); 
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_4x8_45.jpg);
 	};
 
 
@@ -130,6 +139,7 @@ class CfgVehicles {
 		displayName = "AI Wall 4x1";
         model = QPATHTOF(models\btc_AIPaths_Wall_4x1.p3d); 
         editorSubcategory = QGVAR(EdSubcat_Walls);
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_Wall_4x1.jpg);
         hiddenSelections[] = { 
             "Wall"
         };
@@ -140,14 +150,17 @@ class CfgVehicles {
 	class GVAR(Wall_4x2): GVAR(Wall_4x1) {
 		displayName = "AI Wall 4x2"; 
         model = QPATHTOF(models\btc_AIPaths_Wall_4x2.p3d); 
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_Wall_4x2.jpg);
     };
     class GVAR(Wall_6x1): GVAR(Wall_4x1) {
 		displayName = "AI Wall 6x1"; 
         model = QPATHTOF(models\btc_AIPaths_Wall_6x1.p3d); 
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_Wall_6x1.jpg);
     };
     class GVAR(Wall_6x2): GVAR(Wall_4x1) {
 		displayName = "AI Wall 6x2"; 
         model = QPATHTOF(models\btc_AIPaths_Wall_6x2.p3d); 
+        editorPreview = QPATHTOF(editorPreviews\btc_AIPaths_Wall_6x2.jpg);
     };
 };
 
