@@ -42,27 +42,20 @@ namespace arma {
         }
     }
 
-
-    logData logEntry::find(const String s) {
-        for (logData& ld : logs) {
-            if (ld.name == s) return ld;
-        }
-        return logData(); //return an empty object to draw empty data from
-    }
-
     void manageSession(std::vector<String> args) {
 
         arma::logEntry entry{ args };
 
-        auto path = getCurrentFilePath(entry);
+        const auto path = getCurrentFilePath(entry);
+        if (!fs::exists(path.parent_path()))
+            fs::create_directories(path.parent_path());
+
         json j;
         if (fs::exists(path)) {
             std::ifstream is{ path };
             is >> j;
             is.close();
         }
-        else
-            fs::create_directories(path.parent_path());
 
         auto timestamp = currentDateTime("%Y-%m-%dT%H:%M:%S");
         for (const logData& ld : entry.logs) {
@@ -105,10 +98,10 @@ namespace arma {
 
 
     const std::filesystem::path getCurrentFilePath(const logEntry& le) {
-        std::filesystem::path filePath{ std::filesystem::current_path() /
+        std::filesystem::path path{ std::filesystem::current_path() /
             "serverLogger" / le.worldName / currentDateTime("%Y/%m/%d") / (le.missionName + ".JSON") };
 
-        return filePath;
+        return path;
     }
 
 }

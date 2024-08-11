@@ -61,7 +61,6 @@ namespace arma {
 
         logEntry() {}
         logEntry(std::vector<String>& data_entry);
-        logData find(const String);
     };
 
     bool operator== (const logData&, const logData&);

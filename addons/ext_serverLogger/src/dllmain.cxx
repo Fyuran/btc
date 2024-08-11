@@ -35,9 +35,8 @@ int RVExtensionArgs(char* output, int outputSize, const char* function, const ch
 	/*DATA FUNCTIONS*/
 
 	if (strcmp(function, "manageSession") == 0) {
-		arma::manageSession(arguments);
-		//std::thread t1{ arma::manageSession, arguments };
-		//t1.detach();
+		std::thread t1{ arma::manageSession, arguments };
+		t1.detach();
 
 		strncpy_safe(output, "data saved", outputSize);
 		return 201;
