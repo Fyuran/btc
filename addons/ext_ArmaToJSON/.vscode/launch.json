@@ -1,0 +1,43 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Pipe Attach",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "/home/fyuran/.local/share/Steam/steamapps/arma3/arma3server",
+            "processId": "${command:pickRemoteProcess}",
+            "pipeTransport": {
+                "debuggerPath": "gdb",
+                "pipeProgram": "plink",
+                "pipeArgs": [
+                    "-ssh", 
+                    "127.0.0.1", 
+                    "-l",
+                    "fyuran",
+                    "-pw",
+                    "deadspace123"
+                ],
+                "pipeCwd": ""
+            },
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+        
+       
+    ]
+}

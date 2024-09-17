@@ -6,17 +6,15 @@
       "hidden": true,
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "${sourceDir}/out/install/${presetName}",
-      "cacheVariables": {},
+      "installDir": "D:\\SteamLibrary\\steamapps\\common\\Arma 3",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl.exe",
+        "CMAKE_CXX_COMPILER": "cl.exe"
+      },
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
         "rhs": "Windows"
-      },
-      "vendor": {
-        "microsoft.com/VisualStudioSettings/CMake/3.29.3": {
-          "intelliSenseMode": "windows-msvc-x64"
-        }
       }
     },
     {
@@ -47,7 +45,8 @@
       "installDir": "${sourceDir}/out/install/${presetName}",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_SHARED_LIBRARY_PREFIX_CXX": ""
+        "CMAKE_SHARED_LIBRARY_PREFIX_CXX": "",
+        "CMAKE_CXX_COMPILER": "g++"
       },
       "condition": {
         "type": "equals",
@@ -55,9 +54,8 @@
         "rhs": "Linux"
       },
       "vendor": {
-        "microsoft.com/VisualStudioSettings/CMake/3.29.3": {
-          "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}",
-          "intelliSenseMode": "linux-gcc-x64"
+        "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+          "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
         }
       }
     },
@@ -65,10 +63,6 @@
       "name": "linux-release",
       "displayName": "Linux Release",
       "inherits": "linux-debug",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }

@@ -1,6 +1,10 @@
-#include "armaFileFunctions.h"
+#include "armaFileFunctions.hpp"
+#include <nlohmann/json.hpp>
 #include <boost/date_time.hpp>
+#include <thread>
+#include <future>
 
+using JSON = nlohmann::json;
 namespace arma {
 
 	String getCurrentDateTime() {
@@ -15,8 +19,7 @@ namespace arma {
 		return ss.str();
 	}
 
-	String copyFile(const fs::path& filePath)
-	{
+	String copyFile(const fs::path filePath) {
 
 		String filePathFull = filePath.filename().string(); //Get the name portion without the timestamp from file
 		String name;
@@ -24,7 +27,7 @@ namespace arma {
 		ss << filePathFull;  
 		ss >> name; //terminates extraction once whitespace is reached
 		String backupSuffix{ name + " (" + getCurrentDateTime() + ").JSON" };
-		fs::path backupFilePath{ backupSuffix };
+		fs::path backupFilePath{ fs::current_path() / "JSON" / backupSuffix };
 
 		bool hasCopied = false;
 		try {
@@ -119,7 +122,7 @@ namespace arma {
 		return ss.str();
 	}
 
-	String deleteFile(const fs::path& filePath) {
+	String deleteFile(const fs::path filePath) {
 		String fileNameFull{ filePath.filename().string() };
 
 		try {
@@ -132,10 +135,10 @@ namespace arma {
 		return fileNameFull + " has been deleted";
 	}
 
-	String renameFile(const fs::path& filePath, String name) {
+	String renameFile(const fs::path filePath, String name) {
 		name += " (" + getCurrentDateTime() + ").JSON";
 
-		fs::path newFilePath{ name };
+		fs::path newFilePath{ fs::current_path() / "JSON" / name };
 
 		try {
 			fs::rename(filePath, newFilePath);

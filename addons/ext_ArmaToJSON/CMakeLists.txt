@@ -5,24 +5,23 @@ cmake_policy(SET CMP0135 NEW)
 project ("btc_ArmaToJSON_x64"
            LANGUAGES CXX
 )
-include(FetchContent)
 
 add_library (btc_ArmaToJSON_x64 SHARED)
+
 target_sources (btc_ArmaToJSON_x64 PRIVATE 
-    "src/armaFileFunctions.cxx"
-    "src/dllmain.cxx"
+    "src/armaFileFunctions.cpp"
+    "src/dllmain.cpp"
     "src/dllmain.def"
-    "src/armaDataFunctions.cxx"
-)
-target_compile_features(btc_ArmaToJSON_x64 PRIVATE cxx_std_17)
-
-target_precompile_headers(
-	btc_ArmaToJSON_x64 PRIVATE "include/pch.h"
-)
-
+    "src/armaDataFunctions.cpp"
+    "include/armaDataFunctions.hpp"
+    "include/armaFileFunctions.hpp"
+    "include/dllmain.hpp"
+  )
 target_include_directories(btc_ArmaToJSON_x64 PRIVATE
     "include"
 )
+
+target_compile_features(btc_ArmaToJSON_x64 PRIVATE cxx_std_17)
 
 if(MSVC)
     target_compile_options(btc_ArmaToJSON_x64 PRIVATE
@@ -46,6 +45,7 @@ if(UNIX AND NOT APPLE)
     target_link_options(btc_ArmaToJSON_x64 PRIVATE -static-libgcc -static-libstdc++)
 endif()
 
+include(FetchContent)
 FetchContent_Declare(json 
     GIT_REPOSITORY "https://github.com/nlohmann/json.git"
 )
@@ -53,3 +53,10 @@ FetchContent_MakeAvailable(json)
 
 find_package(Boost 1.85 COMPONENTS date_time REQUIRED)
 target_link_libraries(btc_ArmaToJSON_x64 PRIVATE nlohmann_json::nlohmann_json Boost::date_time)
+
+if(WIN32) 
+    install(TARGETS btc_ArmaToJSON_x64 DESTINATION "D:/SteamLibrary/steamapps/common/Arma 3")
+endif()
+if(UNIX)
+    install(TARGETS btc_ArmaToJSON_x64 DESTINATION "~/.local/share/Steam/steamapps/arma3")
+endif()
