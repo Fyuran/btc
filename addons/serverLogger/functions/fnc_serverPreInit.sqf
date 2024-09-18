@@ -21,11 +21,6 @@ Author:
 ---------------------------------------------------------------------------- */
 #include "..\script_component.hpp"
 
-//execute once at preInit to guarantee file existence with 1 entry
-private _uid = serverName;
-if(!isDedicated) then {_uid = getPlayerUID player}; //listen servers act as both host and server
-"btc_serverLogger" callExtension ["manageNewSession", [missionName, worldName, "0:00:00", ["Server", _uid, round diag_fps, round viewDistance]]];
-
 call FUNC(serverSaveData);
 
 call FUNC(clientsAddData);

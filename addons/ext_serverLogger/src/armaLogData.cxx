@@ -1,63 +1,18 @@
 #include "armaLogData.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/range/algorithm_ext.hpp>
-#include "rapidcsv.h"
-#include <boost/date_time.hpp>
 #include <fstream>
-
+#include <nlohmann/json.hpp>
 /*
     name
     uid
     fps
     viewDistance
 */
+using json = nlohmann::json;
+namespace fs = std::filesystem;
+
 namespace arma {
-
-    void manageSession(std::vector<String> args) {
-        arma::logEntry entry{ args };
-        entry.saveLogData();
-    }
-
-    void manageNewSession(std::vector<String> args) {
-        arma::logEntry entry{ args };
-        auto filePath = getCurrentPath(entry);
-
-        if (!std::filesystem::exists(filePath.parent_path()))
-            std::filesystem::create_directories(filePath.parent_path());
-        std::ofstream of{ filePath, std::ios::trunc };
-        of << "timestamp," << entry.timeStamp << "\n";
-        for (const logData& ld : entry.logs) {
-            of << ld.name << "," << ld.fps;
-            if (ld != entry.logs.back())
-                of << "\n";
-        }
-        of.close();
-    }
-
-    std::filesystem::path getCurrentPath(const logEntry& entry) {
-        auto date = getCurrentDate();
-
-        std::filesystem::path filePath{ std::filesystem::current_path() /
-            "serverLogger_csv" / entry.worldName / date.at(2) / date.at(1) / date.at(0) / (entry.missionName + ".csv") };
-
-        return filePath;
-    }
-
-    std::vector<String> getCurrentDate() {
-        std::vector<String> date;
-
-        std::ostringstream ss;
-        boost::posix_time::ptime system_time{ boost::posix_time::second_clock::local_time() };
-        boost::gregorian::date sDate{ system_time.date() };
-
-        auto date_facet = new boost::gregorian::date_facet("%d %m %Y");
-        ss.imbue(std::locale(ss.getloc(), date_facet));
-
-        ss << sDate;
-        boost::algorithm::split(date, ss.str(), boost::algorithm::is_any_of(" "));
-
-        return date;
-    }
 
     bool operator== (const logData& d1, const logData& d2) {
         return d1.name == d2.name &&
@@ -75,9 +30,10 @@ namespace arma {
 
         missionName = data_entry.at(0);
         worldName = data_entry.at(1);
-        timeStamp = data_entry.at(2);
+        countUnits = stoi(data_entry.at(2));
+        countAgents = stoi(data_entry.at(3));
 
-        std::vector<String> data{ data_entry.cbegin() + 3, data_entry.cend() };
+        std::vector<String> data{ data_entry.cbegin() + 4, data_entry.cend() };
         for (const String& s : data) {
             String copy{ s };
             std::vector<String> splits;
@@ -86,51 +42,66 @@ namespace arma {
         }
     }
 
-    void logEntry::saveLogData() {
+    void manageSession(std::vector<String> args) {
 
-        std::filesystem::path filePath = getCurrentPath(*this);
+        arma::logEntry entry{ args };
 
-        if (std::filesystem::exists(filePath)) {
+        const auto path = getCurrentFilePath(entry);
+        if (!fs::exists(path.parent_path()))
+            fs::create_directories(path.parent_path());
 
-            rapidcsv::Document doc(filePath.generic_string(), rapidcsv::LabelParams(0, 0),
-                rapidcsv::SeparatorParams(),
-                rapidcsv::ConverterParams(true, 0, 0));
+        json j;
+        if (fs::exists(path)) {
+            std::ifstream is{ path };
+            is >> j;
+            is.close();
+        }
 
-            for (const logData& ld : logs) {
-                if (doc.GetRowIdx(ld.name) == -1) {
-                    std::vector<String> rowFPS(doc.GetColumnCount()-1, "");
-                    rowFPS.push_back(ld.fps);
+        auto timestamp = currentDateTime("%Y-%m-%dT%H:%M:%S");
+        for (const logData& ld : entry.logs) {
+            
+            json obj{
+                {"name", ld.name},
+                {"uid", ld.uid},
+                {"fps", ld.fps},
+                {"viewDistance", ld.viewDistance},
+                {"timestamp", timestamp}
+            };
 
-                    doc.InsertRow(doc.GetRowCount(), rowFPS, ld.name);
-                }       
+            if (ld.name == "Server") {
+                obj.push_back({ "units", entry.countUnits });
+                obj.push_back({ "agents", entry.countAgents });
             }
 
-            std::vector<String> fpsColumn(doc.GetRowCount(), "");
-            for (unsigned int i = 0; i < doc.GetRowCount(); i++) {
-                String label = doc.GetRowName(i);
-                logData ld = find(label);
-                fpsColumn.at(i) = ld.fps;
-            }
+            j.push_back(obj);
+        }
 
-            bool isNewColumn = true;
-            for (String label : doc.GetColumnNames()) {
-                if (timeStamp == label) {
-                    doc.SetColumn(label, fpsColumn);
-                    isNewColumn = false;
-                }
-            }
-            if(isNewColumn)
-                doc.InsertColumn(doc.GetColumnCount(), fpsColumn, timeStamp);
-
-            doc.Save(filePath.generic_string());
+        std::ofstream os{ path };
+        if (os) {
+            os << std::setw(4) << j;
+            os.close();
         }
     }
 
-    logData logEntry::find(const String s) {
-        for (logData& ld : logs) {
-            if (ld.name == s) return ld;
-        }
-        return logData(); //return an empty object to draw empty data from
+    String currentDateTime(const char* fmt) {
+
+        time_t now = time(0);
+        struct tm tstruct;
+        char buf[80];
+        tstruct = *localtime(&now);
+
+        strftime(buf, sizeof(buf), fmt, &tstruct); //http://en.cppreference.com/w/cpp/chrono/c/strftime
+        //YYYY MM DD HH MM  "%Y %m %d %H %M %S"
+        //ISO-EXT "YYYY-MM-DDThh:mm:ss" 
+        return buf;
+    }
+
+
+    const std::filesystem::path getCurrentFilePath(const logEntry& le) {
+        std::filesystem::path path{ std::filesystem::current_path() /
+            "serverLogger" / le.worldName / currentDateTime("%Y/%m/%d") / (le.missionName + ".JSON") };
+
+        return path;
     }
 
 }

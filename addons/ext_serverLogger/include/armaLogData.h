@@ -2,7 +2,10 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+
 using String = std::string;
+namespace chrono = std::chrono;
+
 /*
     _name
     _uid
@@ -15,18 +18,24 @@ namespace arma {
 
         String name;
         String uid;
-        String fps;
-        String viewDistance;
+        int fps = 0;
+        int viewDistance = 0;
 
-        logData() {};
-        logData(std::vector<String> v) : logData{ v.at(0), v.at(1), v.at(2), v.at(3)} {}
-        logData(String n, String u, String f, String v) : uid{ u }, fps{ f }, viewDistance{ v } {
-            if(n.at(0) == '=')
-                n.insert(0, " "); //if name starts with an equal sign such as =BTC= Cpt.Ramius most excel-like programs will throw a fit
-            name = n;
-        }
-        logData(logData& other) : name{ other.name }, uid{ other.uid }, fps{ other.fps }, viewDistance{ other.viewDistance } {}
-        logData(logData&& other) noexcept : name{ other.name }, uid{ other.uid }, fps{ other.fps }, viewDistance{ other.viewDistance }  {}
+        logData() {}
+        logData(std::vector<String> v) : logData{ v.at(0), v.at(1), stoi(v.at(2)), stoi(v.at(3)) } {}
+        logData(String n, String u, int f, int v) : name{ n }, uid{ u }, fps{ f }, viewDistance{ v } {}
+        logData(logData& other) :
+            name{ other.name },
+            uid{ other.uid },
+            fps{ other.fps },
+            viewDistance{ other.viewDistance } {}
+
+            logData(logData&& other) noexcept :
+            name{ other.name },
+            uid{ other.uid },
+            fps{ other.fps },
+            viewDistance{ other.viewDistance } {}
+
         logData& operator=(logData&& other) noexcept {
             if (this == &other) return *this;
 
@@ -42,24 +51,22 @@ namespace arma {
         friend bool operator!= (const logData&, const logData&);
     };
 
-    bool operator== (const logData&, const logData&);
-    bool operator!= (const logData&, const logData&);
-
     struct logEntry {
 
         String missionName;
         String worldName;
-        String timeStamp;
+        int countUnits = 0;
+        int countAgents = 0;
         std::vector<logData> logs;
 
-        logEntry() = delete;
+        logEntry() {}
         logEntry(std::vector<String>& data_entry);
-        void saveLogData();
-        logData find(const String);
     };
 
-    std::filesystem::path getCurrentPath(const logEntry& entry);
-    std::vector<String> getCurrentDate();
+    bool operator== (const logData&, const logData&);
+    bool operator!= (const logData&, const logData&);
+
+    String currentDateTime(const char*);
     void manageSession(std::vector<String> args);
-    void manageNewSession(std::vector<String> args);
+    const std::filesystem::path getCurrentFilePath(const logEntry&);
 }

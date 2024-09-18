@@ -1,28 +1,25 @@
-#include "armaFileFunctions.h"
+#include "armaFileFunctions.hpp"
+#include <nlohmann/json.hpp>
 #include <boost/date_time.hpp>
+#include <thread>
+#include <future>
 
+using JSON = nlohmann::json;
 namespace arma {
 
 	String getCurrentDateTime() {
 
 		std::ostringstream ss;
-		boost::posix_time::ptime system_time{ boost::posix_time::second_clock::local_time() };
-		boost::gregorian::date sDate{ system_time.date() };
+		boost::posix_time::ptime time{ boost::posix_time::second_clock::local_time() };
 
-		auto date_facet = new boost::gregorian::date_facet{ "%d-%m-%Y" };
-		ss.imbue(std::locale(ss.getloc(), date_facet));
-		ss << sDate << " ";
-
-		auto time_facet = new boost::posix_time::time_facet;
-		time_facet->time_duration_format("%H-%M");
+		auto time_facet = new boost::posix_time::time_facet{ "%d-%m-%Y %H-%M" };
 		ss.imbue(std::locale(ss.getloc(), time_facet));
-		ss << system_time.time_of_day();
+		ss << time;
 
 		return ss.str();
 	}
 
-	String copyFile(const fs::path& filePath)
-	{
+	String copyFile(const fs::path filePath) {
 
 		String filePathFull = filePath.filename().string(); //Get the name portion without the timestamp from file
 		String name;
@@ -30,7 +27,7 @@ namespace arma {
 		ss << filePathFull;  
 		ss >> name; //terminates extraction once whitespace is reached
 		String backupSuffix{ name + " (" + getCurrentDateTime() + ").JSON" };
-		fs::path backupFilePath{ backupSuffix };
+		fs::path backupFilePath{ fs::current_path() / "JSON" / backupSuffix };
 
 		bool hasCopied = false;
 		try {
@@ -125,7 +122,7 @@ namespace arma {
 		return ss.str();
 	}
 
-	String deleteFile(const fs::path& filePath) {
+	String deleteFile(const fs::path filePath) {
 		String fileNameFull{ filePath.filename().string() };
 
 		try {
@@ -138,10 +135,10 @@ namespace arma {
 		return fileNameFull + " has been deleted";
 	}
 
-	String renameFile(const fs::path& filePath, String name) {
+	String renameFile(const fs::path filePath, String name) {
 		name += " (" + getCurrentDateTime() + ").JSON";
 
-		fs::path newFilePath{ name };
+		fs::path newFilePath{ fs::current_path() / "JSON" / name };
 
 		try {
 			fs::rename(filePath, newFilePath);
