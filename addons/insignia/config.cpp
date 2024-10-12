@@ -15,7 +15,14 @@ class CfgUnitInsignia {
 	class btc_insignia_1 {
 		displayName = "Black Templars Clan Insignia";
 		author = "=BTC= Black Templars Clan";
-		texture = "z\btc\addons\btc_insignia\data\btc_insigna_1.paa";
+		texture = "z\btc\addons\insignia\data\btc_insigna_1.paa";
+		material = "\A3\Ui_f\data\GUI\Cfg\UnitInsignia\default_insignia.rvmat";
+		textureVehicle = "";
+	};
+	class btc_insignia_2 {
+		displayName = "Tiny Bunny - Alice the Fox";
+		author = "Fyuran";
+		texture = "z\btc\addons\insignia\data\alissa_patch.paa";
 		material = "\A3\Ui_f\data\GUI\Cfg\UnitInsignia\default_insignia.rvmat";
 		textureVehicle = "";
 	};
