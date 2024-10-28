@@ -53,7 +53,7 @@ private _loadout = [
 	uniform player,
 	assignedItems[player, true, true]
 ];
-[_loadout, _array] call BTC_WGC_fnc_parseClasses;
+[_loadout, _array] call FUNC(parseClasses);
 
 _array = _array call BIS_fnc_consolidateArray;
 

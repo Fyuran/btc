@@ -1,29 +1,23 @@
-
-/*
-PREP MACRO ’\MAINPREFIX\PREFIX\SUBPREFIX\COMPONENT\fnc_<FNC>.sqf’
-ADDON is already defined by CBA(PREFIX,COMPONENT)
-*/
 #include "script_component.hpp"
 class CfgPatches {
 	class ADDON {
-		name = "=BTC= Water Bottle & Canteen stamina regain";
+		name = "=BTC= KAT FAKS";
 		author = "=BTC= Black Templars Clan";
         authors[] = {"=BTC=Fyuran"};
-		units[] = {"ACE_Canteen_Nearly_Empty_Item","ACE_Canteen_Nearly_Full_Item"};
 		url = "http://www.blacktemplars.altervista.org";
 		requiredVersion = 0.1;
-		weapons[] = {"ACE_Canteen_Nearly_Empty","ACE_Canteen_Nearly_Full"};
-		requiredAddons[] = {"ace_advanced_fatigue","ace_interaction","ace_medical_feedback","ace_field_rations"};
+		// List of objects (CfgVehicles classes) contained in the addon. Important also for Zeus content (units and groups) unlocking.
+		units[] = {"kat_btc_FAK_M1_Item", "kat_btc_FAK_M1_Mag", "kat_btc_FAK_M2_Item", "kat_btc_FAK_M2_Mag"};
+		// List of weapons (CfgWeapons classes) contained in the addon.
+		weapons[] = {"kat_btc_FAK_M1", "kat_btc_FAK_M2"};
+		requiredAddons[] = {"cba_xeh", "kat_main", "kat_misc"};
 	};
 };
 
-class CfgWeapons {
-    
-};
-
-class CfgVehicles {
-
-};
+#include "CfgFunctions.hpp"
+#include "CfgVehicles.hpp"
+#include "CfgMagazines.hpp"
+#include "CfgWeapons.hpp"
 
 class Extended_PreStart_EventHandlers {
     class ADDON {
