@@ -104,6 +104,9 @@ private _summedKgs = 0;
 	
 }forEach _array;
 
+
+_array = [_array, [], { _x#5 }, "DESCEND"] call BIS_fnc_sortBy; //sort by KG
+
 for "_i" from 0 to (count (_array#0)) do {
 	_listNBox lnbAddColumn _i;
 }; //add as many columns as required
