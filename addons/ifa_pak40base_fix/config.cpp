@@ -15,34 +15,27 @@ class CfgPatches {
 
 class CfgVehicles {
  	class All;
-	class AllVehicles: All
-	{
+	class AllVehicles: All {
 		class ViewOptics;
-		class NewTurret
-		{
+		class NewTurret {
 			class ViewGunner;
 		};
 	};
 	class Land: AllVehicles{};
-	class LandVehicle: Land
-	{
+	class LandVehicle: Land {
 		class ViewPilot;
 		class CommanderOptics;
 	};
-    class StaticWeapon: LandVehicle
-	{
+    class StaticWeapon: LandVehicle {
 		class NewTurret;
-		class Turrets
-		{
+		class Turrets {
 			class MainTurret;
 			class CommanderOptics: CommanderOptics {};
 			class ViewOptics: ViewOptics {};
 		};
 	};
-	class StaticCannon: StaticWeapon
-	{
-		class Turrets: Turrets
-		{
+	class StaticCannon: StaticWeapon {
+		class Turrets: Turrets {
 			class MainTurret;
 		};
 	};
