@@ -47,7 +47,7 @@ class CfgPatches {
 		author = "=BTC= Black Templars Clan";
         authors[] = {"=BTC=Fyuran"};
 		units[] = {"ACE_Canteen_Nearly_Empty_Item","ACE_Canteen_Nearly_Full_Item"};
-		url = "http://www.blacktemplars.altervista.org";
+		url = "http://www.blacktemplars.it";
 		requiredVersion = 0.1;
 		weapons[] = {"ACE_Canteen_Nearly_Empty","ACE_Canteen_Nearly_Full"};
 		requiredAddons[] = {"ace_advanced_fatigue","ace_interaction","ace_medical_feedback","ace_field_rations"};

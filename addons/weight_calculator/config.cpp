@@ -5,7 +5,7 @@ class CfgPatches {
 		author = "=BTC= Black Templars Clan";
         authors[] = {"=BTC=Fyuran"};
 		units[] = {};
-		url = "http://www.blacktemplars.altervista.org";
+		url = "http://www.blacktemplars.it";
 		requiredVersion = 0.1;
 		weapons[] = {};
 		requiredAddons[] = {"cba_xeh"};
