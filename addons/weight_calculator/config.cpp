@@ -8,7 +8,7 @@ class CfgPatches {
 		url = "http://www.blacktemplars.it";
 		requiredVersion = 0.1;
 		weapons[] = {};
-		requiredAddons[] = {"cba_xeh"};
+		requiredAddons[] = {"btc_main"};
 	};
 };
 

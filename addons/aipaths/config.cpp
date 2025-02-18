@@ -26,7 +26,7 @@ class CfgPatches {
 	        GVAR(Wall_6x2)
         };
 		weapons[] = {};
-		requiredAddons[] = {"cba_xeh"};
+		requiredAddons[] = {"btc_main"};
 		url = "https://www.blacktemplars.it/";
 		author = "=BTC= Black Templars Clan";
         authors[] = {"=BTC= Fyuran"};

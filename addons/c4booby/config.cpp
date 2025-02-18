@@ -10,7 +10,7 @@ class CfgPatches {
 		url = "http://www.blacktemplars.altervista.org";
 		requiredVersion = 0.1;
 		weapons[] = {};
-		requiredAddons[] = {"ace_medical_feedback", "ace_interaction", "cba_xeh"};
+		requiredAddons[] = {"btc_main"};
 	};
 };
 

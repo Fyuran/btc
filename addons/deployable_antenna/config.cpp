@@ -8,7 +8,7 @@ class CfgPatches {
 		url = "http://www.blacktemplars.it";
 		requiredVersion = 0.1;
 		weapons[] = {QGVAR(DeployableAntenna)};
-		requiredAddons[] = {"cba_common", "cba_xeh", "ace_interaction"};
+		requiredAddons[] = {"btc_main"};
 	};
 };
 
@@ -71,7 +71,7 @@ class CfgVehicles {
 		vehicleClass = "Items";	
 		scopeCurator = 2;
 		class TransportItems {
-			item_xx(GVAR(DeployableAntenna),1);
+			ITEM_XX(GVAR(DeployableAntenna),1);
 		};
 	};
 	

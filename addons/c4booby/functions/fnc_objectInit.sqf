@@ -18,7 +18,7 @@ Author:
     Fyuran
 
 ---------------------------------------------------------------------------- */
-#include "script_component.hpp"
+#include "..\script_component.hpp"
 #define RADIUS 30
 
 params[

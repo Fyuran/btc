@@ -1,8 +1,4 @@
-#define ITEM_XX(a,b) class _xx_##a {name = a; count = b;}
 /*
-PREP MACRO ’\MAINPREFIX\PREFIX\SUBPREFIX\COMPONENT\fnc_<FNC>.sqf’
-ADDON is already defined by CBA(PREFIX,COMPONENT)
-
 // weapon types
 #define TYPE_WEAPON_PRIMARY 1
 #define TYPE_WEAPON_HANDGUN 2
@@ -50,7 +46,7 @@ class CfgPatches {
 		url = "http://www.blacktemplars.it";
 		requiredVersion = 0.1;
 		weapons[] = {"ACE_Canteen_Nearly_Empty","ACE_Canteen_Nearly_Full"};
-		requiredAddons[] = {"ace_advanced_fatigue","ace_interaction","ace_medical_feedback","ace_field_rations"};
+		requiredAddons[] = {"btc_main"};
 	};
 };
 

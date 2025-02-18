@@ -17,7 +17,7 @@
 	    Fyuran
 	
 ---------------------------------------------------------------------------- */
-#include "script_component.hpp"
+#include "..\script_component.hpp"
 
 #define _WEAPONCFG (_cfg >> 'CfgWeapons' >> _class)
 #define _WEAPONDATA(ARG) (_WEAPONCFG##>>ARG)

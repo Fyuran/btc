@@ -18,7 +18,7 @@ Author:
     Fyuran
 
 ---------------------------------------------------------------------------- */
-#include "script_component.hpp"
+#include "..\script_component.hpp"
 params[
 	["_obj",objNull,[objNull]],
     ["_end_time",60,[0]],

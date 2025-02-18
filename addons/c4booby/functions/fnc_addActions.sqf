@@ -17,7 +17,7 @@ Author:
     Fyuran
 
 ---------------------------------------------------------------------------- */
-#include "script_component.hpp"
+#include "..\script_component.hpp"
 if(!params [
 	["_defuser",objNull,[objNull]],
 	["_obj",objNull,[objNull]]

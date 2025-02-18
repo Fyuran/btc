@@ -17,7 +17,7 @@ Author:
     Fyuran
 
 ---------------------------------------------------------------------------- */
-#include "script_component.hpp"
+#include "..\script_component.hpp"
 if(!params[
 	["_defuser",objNull,[objNull]]
 ]) exitWith{ERROR_MSG_1("btc_c4booby_fnc_removeActions: bad params: %1", _this)};
